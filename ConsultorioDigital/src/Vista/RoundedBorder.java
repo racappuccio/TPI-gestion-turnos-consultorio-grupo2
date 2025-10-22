@@ -1,5 +1,5 @@
 
-package frontend;
+package Vista;
 import java.awt.*;
 import javax.swing.border.Border;
 

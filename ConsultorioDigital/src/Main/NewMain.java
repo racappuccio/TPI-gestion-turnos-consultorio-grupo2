@@ -2,13 +2,13 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Main.java to edit this template
  */
-package backend;
+package Main;
 
 /**
  *
- * @author Educa informatica
+ * @author adriel
  */
-public class ConsultorioDigital {
+public class NewMain {
 
     /**
      * @param args the command line arguments
