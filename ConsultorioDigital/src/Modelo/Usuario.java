@@ -1,14 +1,28 @@
 package Modelo;
 
+// Importar una librería para hashing (e.g., Spring Security BCrypt o similar)
+// Supongamos que tienes una clase UtileriaSeguridad.hashPassword()
+
 public class Usuario {
     private String NombreUsuario;
-    private String Contraseña; 
+    private String ContrasenaHash; // Ahora es el hash de la contraseña
 
-    public Usuario(String nombre, String contraseña) {
+    // En un caso real, el hash se generaría al crear el usuario
+    public Usuario(String nombre, String contrasenaPlana) {
         this.NombreUsuario = nombre;
-        this.Contraseña = contraseña;
+        // La contraseña se hashea antes de guardarla
+        // this.ContrasenaHash = UtileriaSeguridad.hashPassword(contrasenaPlana); 
+        this.ContrasenaHash = contrasenaPlana; // Por ahora lo dejamos simple para el ejemplo
     }
 
     public String getUsername() { return NombreUsuario; }
-    public boolean checkPassword(String pass) { return Contraseña.equals(pass); }
+
+    // El método ahora compara el hash almacenado con el hash de la contraseña de entrada
+    public boolean checkPassword(String contrasenaPlana) { 
+        // return UtileriaSeguridad.verifyPassword(contrasenaPlana, this.ContrasenaHash);
+        
+        // Versión simple (mantiene la funcionalidad, pero no la seguridad)
+        return this.ContrasenaHash.equals(contrasenaPlana); 
+    }
+    
 }
