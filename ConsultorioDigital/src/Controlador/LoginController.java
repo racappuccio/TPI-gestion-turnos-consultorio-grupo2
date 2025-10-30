@@ -23,6 +23,10 @@ public class LoginController implements ActionListener {
         iniciarControl();
     }
 
+    public LoginController(JFrame_principal vistaLogin) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
     /**
      * Configura los ActionListeners para los componentes de la vista.
      */
