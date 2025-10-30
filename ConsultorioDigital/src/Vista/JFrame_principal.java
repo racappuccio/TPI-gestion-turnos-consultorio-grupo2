@@ -1,7 +1,5 @@
 package Vista;
 
-import Modelo.RepositorioUsuarios;
-import Modelo.Usuario;
 import javax.swing.*;
 import javax.swing.BorderFactory;
 
@@ -164,30 +162,8 @@ public class JFrame_principal extends javax.swing.JFrame {
     }//GEN-LAST:event_jTextField1ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // dentro de jButton1ActionPerformed(...)
-        String nombre = jTextField1.getText().trim();
-        String contrasena = new String(jPasswordField1.getPassword());
-
-        if (nombre.isEmpty() || contrasena.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Por favor complete usuario y contraseña", "Error", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-
-// buscar usuario en el repositorio (clase Modelo.RepositorioUsuarios)
-        Modelo.Usuario user = Modelo.RepositorioUsuarios.buscarUsuario(nombre);
-
-        if (user != null && user.checkPassword(contrasena)) {
-            JOptionPane.showMessageDialog(this, "Inicio de sesión exitoso", "OK", JOptionPane.INFORMATION_MESSAGE);
-
-            // Abrir ventana siguiente (demo). Asegurate de crear Vista.MenuPrincipalDemo o cambiar el nombre.
-            Vista.MenuPrincipalDemo demo = new Vista.MenuPrincipalDemo();
-            demo.setLocationRelativeTo(this);
-            demo.setVisible(true);
-            this.dispose(); // cerrar login
-        } else {
-            JOptionPane.showMessageDialog(this, "Usuario o contraseña incorrectos", "Error", JOptionPane.ERROR_MESSAGE);
-        }
-
+       // ¡DEBE ESTAR VACÍO! El controlador manejará esto.
+    // Si tuviera código aquí, tendría prioridad sobre el ActionListener del controlador.
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jPasswordField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jPasswordField1ActionPerformed

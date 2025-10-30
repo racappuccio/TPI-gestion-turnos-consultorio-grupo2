@@ -1,7 +1,7 @@
-
 package Main;
 
 import Vista.JFrame_principal;
+import Controlador.LoginController; // Asegúrate de importar el controlador
 
 /**
  *
@@ -10,18 +10,8 @@ import Vista.JFrame_principal;
 public class NewMain {
 
     public static void main(String args[]) {
-    
-        // 1. Crear la Vista (GUI)
-        JFrame_principal vistaLogin = new JFrame_principal();
-        
-        // 2. Crear el Controlador y conectarlo con la Vista
-        // ¡¡NOTA: Ya no le pasamos un usuario!!
-        Controlador.LoginController controlador = new Controlador.LoginController(vistaLogin);
 
-        // 3. Hacer visible la Vista
-        vistaLogin.setVisible(true);
-
-        // 4. Aplicar el Look and Feel (esto está bien)
+        // 1. Aplicar el Look and Feel (Debe ir PRIMERO)
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
@@ -29,8 +19,24 @@ public class NewMain {
                     break;
                 }
             }
-        } catch (Exception ex) { // Captura genérica simplificada
+        } catch (Exception ex) { 
             java.util.logging.Logger.getLogger(JFrame_principal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+
+        // 2. Iniciar la aplicación en el hilo de despacho de eventos (EDT)
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                
+                // 3. Crear la Vista (GUI del Login)
+                JFrame_principal vistaLogin = new JFrame_principal();
+                
+                // 4. Crear el Controlador y conectarlo con la Vista.
+                // El Controlador accede directamente al RepositorioUsuarios (Modelo).
+                LoginController controlador = new LoginController(vistaLogin);
+
+                // 5. Hacer visible la Vista
+                vistaLogin.setVisible(true);
+            }
+        });
     }
 }

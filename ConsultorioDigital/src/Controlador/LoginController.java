@@ -1,31 +1,26 @@
 package Controlador;
 
 import Vista.JFrame_principal;
-import Modelo.Usuario;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JOptionPane;
-
+import Vista.MenuPrincipal;
+import Modelo.RepositorioUsuarios;
 public class LoginController implements ActionListener {
 
     private JFrame_principal vista; // La vista (interfaz gráfica)
-    private Usuario modelo;         // El modelo (datos y lógica de negocio)
-
     /**
      * Constructor del controlador.
      * @param vista La instancia del JFrame principal.
      * @param modelo La instancia del modelo Usuario (o una clase de acceso a datos de usuario).
      */
-    public LoginController(JFrame_principal vista, Usuario modelo) {
+    public LoginController(JFrame_principal vista) {
         this.vista = vista;
-        this.modelo = modelo;
+      //  this.modelo = modelo;
         // Inicializa la escucha de eventos de la vista
         iniciarControl();
     }
 
-    public LoginController(JFrame_principal vistaLogin) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
 
     /**
      * Configura los ActionListeners para los componentes de la vista.
@@ -58,26 +53,43 @@ public class LoginController implements ActionListener {
 
     /**
      * Lógica de negocio para intentar iniciar sesión.
-     */
-    private void iniciarSesion() {
-        // 1. Obtener datos de la vista (View)
-        String usuario = vista.getjTextField1().getText();
-        String contrasena = vista.jPasswordField1().getText(); 
+    */
+  /**
+ * Lógica de negocio para intentar iniciar sesión.
+ */
+private void iniciarSesion() {
+    // 1. Obtener datos de la vista (View)
+    String usuario = vista.getjTextField1().getText().trim();
+    String contrasena = vista.jPasswordField1().getText();
 
-        // 2. Interactuar con el modelo (Model)
-        // En este ejemplo, el modelo 'Usuario' es estático para la demostración.
-        // En una aplicación real, se consultaría una base de datos o un servicio.
+    // 2. Validación de campos vacíos
+    if (usuario.isEmpty() || contrasena.isEmpty()) {
+        JOptionPane.showMessageDialog(vista, "Por favor, complete usuario y contraseña", "Advertencia", JOptionPane.WARNING_MESSAGE);
+        return;
+    }
+
+    // 3. Buscar y validar credenciales
+    Modelo.Usuario user = Modelo.RepositorioUsuarios.buscarUsuario(usuario);
+
+    if (user != null && user.checkPassword(contrasena)) {
+        // Credenciales correctas
+        JOptionPane.showMessageDialog(vista, "¡Inicio de Sesión Exitoso!", "Bienvenido", JOptionPane.INFORMATION_MESSAGE);
+
+        // 🚀 Lógica de Navegación (CORREGIDA) 🚀
         
-        // Aquí se simula la validación de credenciales contra el modelo
-        if (modelo.getUsername().equals(usuario) && modelo.checkPassword(contrasena)) {
-            // Credenciales correctas
-            JOptionPane.showMessageDialog(vista, "¡Inicio de Sesión Exitoso!", "Bienvenido", JOptionPane.INFORMATION_MESSAGE);
-            // Lógica para abrir la siguiente ventana, por ejemplo:
-            // vista.dispose(); // Cierra la ventana de login
-            // new JFrame_otra_ventana().setVisible(true);
-        } else {
-            // Credenciales incorrectas
-            JOptionPane.showMessageDialog(vista, "Usuario o Contraseña Incorrectos", "Error de Login", JOptionPane.ERROR_MESSAGE);
-        }
+        // 1. Crear una instancia de la ventana del menú principal
+        MenuPrincipal menu = new MenuPrincipal(); // ⬅️ Nombre CORREGIDO
+        
+        // 2. Hacer visible la nueva ventana
+        menu.setVisible(true);
+
+        // 3. Cerrar la ventana de login actual
+        vista.dispose();
+       
+    } else {
+        // Credenciales incorrectas
+        JOptionPane.showMessageDialog(vista, "Usuario o contraseña incorrectos", "Error de Login", JOptionPane.ERROR_MESSAGE);
     }
 }
+}
+
