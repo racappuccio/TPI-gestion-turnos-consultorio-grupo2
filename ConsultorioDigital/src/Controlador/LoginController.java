@@ -58,7 +58,7 @@ public class LoginController implements ActionListener {
     private void iniciarSesion() {
         // 1. Obtener datos de la vista (View)
         String usuario = vista.getjTextField1().getText();
-        String contrasena = vista.getjTextField2().getText(); 
+        String contrasena = vista.jPasswordField1().getText(); 
 
         // 2. Interactuar con el modelo (Model)
         // En este ejemplo, el modelo 'Usuario' es estático para la demostración.
