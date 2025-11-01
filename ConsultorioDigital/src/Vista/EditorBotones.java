@@ -1,5 +1,8 @@
 package Vista;
 
+
+import Modelo.Turno;
+import Modelo.TurnoManager;
 import javax.swing.*;
 import javax.swing.table.*;
 import java.awt.*;
@@ -97,27 +100,41 @@ public class EditorBotones extends DefaultCellEditor {
     
     private void agendarTurno(int row) {
         String hora = (String) table.getValueAt(row, 0);
-        
+    
         JTextField txtNombre = new JTextField();
+        JTextField txtDni = new JTextField();
+        JTextField txtTelefono = new JTextField();
+        JTextField txtObraSocial = new JTextField();
         JTextField txtMotivo = new JTextField();
-        
+    
         Object[] mensaje = {
             "Horario:", hora,
-            "Nombre del paciente:", txtNombre,
+            "Nombre y apellido del paciente:", txtNombre,
+            "DNI del paciente: ", txtDni,
+            "Teléfono del paciente: ", txtTelefono,
+            "Obra social: ", txtObraSocial,
             "Motivo de consulta:", txtMotivo
+               
         };
+    
+        if (JOptionPane.showConfirmDialog(panel, mensaje, "Agendar Turno", 
+            JOptionPane.OK_CANCEL_OPTION) == JOptionPane.OK_OPTION) {
         
-        int opcion = JOptionPane.showConfirmDialog(panel, mensaje, "Agendar Turno", 
-            JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
-        
-        if (opcion == JOptionPane.OK_OPTION) {
             String nombre = txtNombre.getText().trim();
             String motivo = txtMotivo.getText().trim();
-            
+            String dni = txtDni.getText().trim();
+            String telefono = txtTelefono.getText().trim();
+            String obraSocial = txtObraSocial.getText().trim();
+        
             if (!nombre.isEmpty()) {
+                // Guardar en TurnoManager
+                TurnoManager.getInstancia().agregarTurno(hora, nombre, dni, telefono, obraSocial, motivo);
+            
+                // Actualizar tabla
                 table.setValueAt(nombre, row, 1);
                 table.setValueAt(motivo, row, 2);
-                JOptionPane.showMessageDialog(panel, "Turno agendado exitosamente para " + nombre);
+            
+                JOptionPane.showMessageDialog(panel, "Turno agendado exitosamente");
             } else {
                 JOptionPane.showMessageDialog(panel, "El nombre del paciente es obligatorio", "Error", JOptionPane.WARNING_MESSAGE);
             }
@@ -129,12 +146,22 @@ public class EditorBotones extends DefaultCellEditor {
         String nombre = (String) table.getValueAt(row, 1);
         String motivo = (String) table.getValueAt(row, 2);
         
-        JTextField txtNombre = new JTextField(nombre);
-        JTextField txtMotivo = new JTextField(motivo);
+        //obtener turno completo desde turnosManager
+        Turno turno = TurnoManager.getInstancia().getTurnoPorHora(hora);
+        if (turno == null) return;
+        
+        JTextField txtNombre = new JTextField(turno.getNombre());
+        JTextField txtDni = new JTextField(turno.getDni());
+        JTextField txtTelefono = new JTextField(turno.getTelefono());
+        JTextField txtObraSocial = new JTextField(turno.getObraSocial());
+        JTextField txtMotivo = new JTextField(turno.getMotivo());
         
         Object[] mensaje = {
             "Horario:", hora,
-            "Nombre del paciente:", txtNombre,
+            "Nombre y apellido del paciente:", txtNombre,
+            "DNI del paciente: ", txtDni,
+            "Teléfono del paciente: ", txtTelefono,
+            "Obra social: ", txtObraSocial,
             "Motivo de consulta:", txtMotivo
         };
         
@@ -143,41 +170,78 @@ public class EditorBotones extends DefaultCellEditor {
         
         if (opcion == JOptionPane.OK_OPTION) {
             String nuevoNombre = txtNombre.getText().trim();
+            String nuevoDni = txtDni.getText().trim();
+            String nuevoTelefono = txtTelefono.getText().trim();
+            String nuevaObraSocial  = txtObraSocial.getText().trim();
             String nuevoMotivo = txtMotivo.getText().trim();
             
-            if (!nuevoNombre.isEmpty()) {
-                table.setValueAt(nuevoNombre, row, 1);
-                table.setValueAt(nuevoMotivo, row, 2);
+            if (!nombre.isEmpty()) {
+                //guardar todos los datos en turnoManager
+                TurnoManager.getInstancia().agregarTurno(hora, nombre, nuevoDni, nuevoTelefono, nuevaObraSocial, motivo);
+                
+                //actualizar todo lo visble en la tabla
+                table.setValueAt(nombre, row, 1);
+                table.setValueAt(motivo, row, 2);
+                
                 JOptionPane.showMessageDialog(panel, "Turno modificado exitosamente");
+            } else {
+                JOptionPane.showMessageDialog(panel , "El nombre del paciente es obligatorio", "Error", JOptionPane.WARNING_MESSAGE);
             }
         }
     }
     
     private void eliminarTurno(int row) {
         String nombre = (String) table.getValueAt(row, 1);
+        String hora = (String) table.getValueAt(row, 0);
         
-        int confirm = JOptionPane.showConfirmDialog(panel,
+        if (JOptionPane.showConfirmDialog(panel,
             "¿Cancelar el turno de " + nombre + "?",
             "Confirmar cancelación",
-            JOptionPane.YES_NO_OPTION,
-            JOptionPane.WARNING_MESSAGE);
-        
-        if (confirm == JOptionPane.YES_OPTION) {
+            JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+
+            // Eliminar en TurnoManager
+            TurnoManager.getInstancia().eliminarTurno(hora);
+
+            // Actualizar tabla
             table.setValueAt("Libre", row, 1);
             table.setValueAt("", row, 2);
-            JOptionPane.showMessageDialog(panel, "Turno cancelado. El horario quedó disponible.");
+
+            JOptionPane.showMessageDialog(panel, "Turno cancelado");
         }
     }
     
     private void verDetalles(int row) {
         String hora = (String) table.getValueAt(row, 0);
-        String nombre = (String) table.getValueAt(row, 1);
-        String motivo = (String) table.getValueAt(row, 2);
         
-        JOptionPane.showMessageDialog(panel,
-            "=== DETALLES DEL TURNO ===\n\n" +
-            "Hora: " + hora + "\n" +
-            "Paciente: " + nombre + "\n" +
-            "Motivo: " + motivo);
+        //obtener turno coopleto desde turnoManager
+        Turno turno = TurnoManager.getInstancia().getTurnoPorHora(hora);
+        
+        if (turno == null || turno.getNombre().equalsIgnoreCase("Libre")){
+            JOptionPane.showMessageDialog(panel, "Este horario está libre", "Sin turno", JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
+        
+        //mostrar todos los datos
+        String detalles = String.format(
+                " ======== DETALLES DEL TURNO =======\n\n"+
+                "Horario:       %s\n"+
+                "Paciente:      %s\n"+
+                "DNI:           %s\n"+
+                "Telefono:      %s\n"+
+                "Obra Social:   %s\n"+
+                "Motivo:        %s\n"+
+                turno.getHora(),
+                turno.getNombre(),
+                turno.getDni().isEmpty() ? "No especificado" : turno.getDni(),
+                turno.getTelefono().isEmpty() ? "No especificado" : turno.getTelefono(),
+                turno.getObraSocial().isEmpty() ? "No especificado" : turno.getObraSocial(),
+                turno.getMotivo().isEmpty() ? "No especificado" : turno.getMotivo()
+                
+        );
+        
+        JOptionPane.showMessageDialog(panel, detalles, "Detalles del turno", JOptionPane.INFORMATION_MESSAGE);
+                
+                      
     }
 }
+

@@ -4,10 +4,7 @@
  */
 package Vista;
 
-/**
- *
- * @author adriel
- */
+import Modelo.TurnoManager;
 public class MenuPrincipal extends javax.swing.JFrame {
 
     /**
@@ -188,11 +185,56 @@ public class MenuPrincipal extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        // TODO add your handling code here:
+        // Abrir la ventana de turnos
+        JFrame_turnos ventanaTurnos = new JFrame_turnos();
+        ventanaTurnos.setVisible(true);
+        this.dispose(); //cerrar el menu principal
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
+        javax.swing.JTextField txtHora = new javax.swing.JTextField();
+        javax.swing.JTextField txtNombre = new javax.swing.JTextField();
+        javax.swing.JTextField txtDni = new javax.swing.JTextField();
+        javax.swing.JTextField txtTelefono = new javax.swing.JTextField();
+        javax.swing.JTextField txtObraSocial = new javax.swing.JTextField();
+        javax.swing.JTextField txtMotivo = new javax.swing.JTextField();
+        
+
+        Object[] mensaje = {
+            "Horario (ej: 10:00):", txtHora,
+            "Nombre del paciente:", txtNombre,
+            "Dni del paciente: ", txtDni,
+            "Teléfono del paciente: ", txtTelefono,
+            "Obra social: ", txtObraSocial,
+            "Motivo de consulta:", txtMotivo,
+        };
+
+        if (javax.swing.JOptionPane.showConfirmDialog(this, mensaje, 
+            "Agendar Nuevo Turno", javax.swing.JOptionPane.OK_CANCEL_OPTION) 
+            == javax.swing.JOptionPane.OK_OPTION) {
+
+            String hora = txtHora.getText().trim();
+            String nombre = txtNombre.getText().trim();
+            String dni = txtDni.getText().trim();
+            String telefono = txtTelefono.getText().trim();
+            String obraSocial = txtObraSocial.getText().trim();
+            String motivo = txtMotivo.getText().trim();
+
+            if (!hora.isEmpty() && !nombre.isEmpty()) {
+                // Guardar en TurnoManager
+                TurnoManager.getInstancia().agregarTurno(hora, nombre, dni, telefono, obraSocial, motivo);
+
+                javax.swing.JOptionPane.showMessageDialog(this,
+                    "Turno agendado exitosamente para " + nombre + " a las " + hora);
+
+                // Abrir ventana de turnos para ver el resultado
+                JFrame_turnos ventanaTurnos = new JFrame_turnos();
+                ventanaTurnos.setVisible(true);
+                this.dispose();
+            } else {
+                javax.swing.JOptionPane.showMessageDialog(this, "Horario y nombre son obligstorios", "Campos requeridos", javax.swing.JOptionPane.WARNING_MESSAGE);
+            }
+        }  
     }//GEN-LAST:event_jButton2ActionPerformed
 
     /**

@@ -1,5 +1,8 @@
 package Vista;
 
+
+import Modelo.Turno;
+import Modelo.TurnoManager;
 import java.awt.Color;
 import java.awt.Component;
 import javax.swing.JCheckBox;
@@ -45,9 +48,9 @@ public class JFrame_turnos extends javax.swing.JFrame {
         }
     };
 
-    jTable1.getColumnModel().getColumn(0).setCellRenderer(centerRenderer);
-    jTable1.getColumnModel().getColumn(1).setCellRenderer(centerRenderer);
-    jTable1.getColumnModel().getColumn(2).setCellRenderer(centerRenderer);
+    for (int i = 0; i < 3; i++){
+        jTable1.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
+    }
     
     // Configurar botones en la columna Acciones
     jTable1.getColumnModel().getColumn(3).setCellRenderer(new RenderBotones());
@@ -83,24 +86,15 @@ private void cargarHorariosDelDia() {
         (javax.swing.table.DefaultTableModel) jTable1.getModel();
     modelo.setRowCount(0);
     
-    // Horarios cada 30 minutos de 8:00 a 18:00
-    String[] horarios = {
-        "08:00", "08:30", "09:00", "09:30", "10:00", "10:30",
-        "11:00", "11:30", "12:00", "12:30", "13:00", "13:30",
-        "14:00", "14:30", "15:00", "15:30", "16:00", "16:30",
-        "17:00", "17:30"
-    };
-    
-    for (String hora : horarios) {
-        modelo.addRow(new Object[]{hora, "Libre", "", ""});
+    // Cargar desde TurnoManager
+    for (Turno turno : TurnoManager.getInstancia().getTurnos()) {
+        modelo.addRow(new Object[]{
+            turno.getHora(),
+            turno.getNombre(),
+            turno.getMotivo(),
+            ""
+        });
     }
-    
-    // Agregar algunos turnos de ejemplo
-    modelo.setValueAt("Juan Pérez", 4, 1);    // 10:00
-    modelo.setValueAt("Control", 4, 2);
-    
-    modelo.setValueAt("María Gómez", 5, 1);   // 10:30
-    modelo.setValueAt("Consulta", 5, 2);
 }
 
     /**
