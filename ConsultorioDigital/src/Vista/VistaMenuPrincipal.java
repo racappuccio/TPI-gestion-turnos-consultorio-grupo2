@@ -1,16 +1,13 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
+
 package Vista;
 
 import Modelo.TurnoManager;
-public class MenuPrincipal extends javax.swing.JFrame {
+public class VistaMenuPrincipal extends javax.swing.JFrame {
 
     /**
      * Creates new form MenuPricipal
      */
-    public MenuPrincipal() {
+    public VistaMenuPrincipal() {
         initComponents();
     }
 
@@ -32,8 +29,8 @@ public class MenuPrincipal extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
-        jButton2 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
+        BotonAgendarTurno = new javax.swing.JButton();
+        BotonVerAgenda = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
 
@@ -64,33 +61,23 @@ public class MenuPrincipal extends javax.swing.JFrame {
         jPanel2.setBackground(new java.awt.Color(239, 239, 232));
         jPanel2.setForeground(new java.awt.Color(239, 239, 232));
 
-        jButton2.setBackground(new java.awt.Color(21, 70, 77));
-        jButton2.setFont(new java.awt.Font("Arial Black", 0, 24)); // NOI18N
-        jButton2.setForeground(new java.awt.Color(158, 220, 228));
-        jButton2.setText("Agendar turno");
-        jButton2.setAlignmentX(10.0F);
-        jButton2.setAlignmentY(19.0F);
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
-            }
-        });
+        BotonAgendarTurno.setBackground(new java.awt.Color(21, 70, 77));
+        BotonAgendarTurno.setFont(new java.awt.Font("Arial Black", 0, 24)); // NOI18N
+        BotonAgendarTurno.setForeground(new java.awt.Color(158, 220, 228));
+        BotonAgendarTurno.setText("Agendar turno");
+        BotonAgendarTurno.setAlignmentX(10.0F);
+        BotonAgendarTurno.setAlignmentY(19.0F);
 
-        jButton4.setBackground(new java.awt.Color(21, 70, 77));
-        jButton4.setFont(new java.awt.Font("Arial Black", 0, 24)); // NOI18N
-        jButton4.setForeground(new java.awt.Color(158, 220, 228));
-        jButton4.setText("Ver agenda");
-        jButton4.setActionCommand("");
-        jButton4.setAlignmentX(10.0F);
-        jButton4.setAlignmentY(19.0F);
-        jButton4.setMaximumSize(new java.awt.Dimension(218, 42));
-        jButton4.setMinimumSize(new java.awt.Dimension(218, 42));
-        jButton4.setPreferredSize(new java.awt.Dimension(218, 42));
-        jButton4.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton4ActionPerformed(evt);
-            }
-        });
+        BotonVerAgenda.setBackground(new java.awt.Color(21, 70, 77));
+        BotonVerAgenda.setFont(new java.awt.Font("Arial Black", 0, 24)); // NOI18N
+        BotonVerAgenda.setForeground(new java.awt.Color(158, 220, 228));
+        BotonVerAgenda.setText("Ver agenda");
+        BotonVerAgenda.setActionCommand("");
+        BotonVerAgenda.setAlignmentX(10.0F);
+        BotonVerAgenda.setAlignmentY(19.0F);
+        BotonVerAgenda.setMaximumSize(new java.awt.Dimension(218, 42));
+        BotonVerAgenda.setMinimumSize(new java.awt.Dimension(218, 42));
+        BotonVerAgenda.setPreferredSize(new java.awt.Dimension(218, 42));
 
         jLabel4.setFont(new java.awt.Font("Arial Black", 0, 24)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(0, 51, 51));
@@ -111,9 +98,9 @@ public class MenuPrincipal extends javax.swing.JFrame {
                 .addGap(432, 432, 432))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                 .addGap(88, 88, 88)
-                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 231, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(BotonAgendarTurno, javax.swing.GroupLayout.PREFERRED_SIZE, 231, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 231, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(BotonVerAgenda, javax.swing.GroupLayout.PREFERRED_SIZE, 231, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(88, 88, 88))
         );
         jPanel2Layout.setVerticalGroup(
@@ -125,8 +112,8 @@ public class MenuPrincipal extends javax.swing.JFrame {
                     .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(93, 93, 93)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(BotonAgendarTurno, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(BotonVerAgenda, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(125, Short.MAX_VALUE))
         );
 
@@ -161,7 +148,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
                         .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(39, 39, 39)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(26, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -184,59 +171,14 @@ public class MenuPrincipal extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        // Abrir la ventana de turnos
-        JFrame_turnos ventanaTurnos = new JFrame_turnos();
-        ventanaTurnos.setVisible(true);
-        this.dispose(); //cerrar el menu principal
-    }//GEN-LAST:event_jButton4ActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        javax.swing.JTextField txtHora = new javax.swing.JTextField();
-        javax.swing.JTextField txtNombre = new javax.swing.JTextField();
-        javax.swing.JTextField txtDni = new javax.swing.JTextField();
-        javax.swing.JTextField txtTelefono = new javax.swing.JTextField();
-        javax.swing.JTextField txtObraSocial = new javax.swing.JTextField();
-        javax.swing.JTextField txtMotivo = new javax.swing.JTextField();
-        
+public javax.swing.JButton getBotonAgendarTurno() {
+    return BotonAgendarTurno;
+}
 
-        Object[] mensaje = {
-            "Horario (ej: 10:00):", txtHora,
-            "Nombre del paciente:", txtNombre,
-            "Dni del paciente: ", txtDni,
-            "Teléfono del paciente: ", txtTelefono,
-            "Obra social: ", txtObraSocial,
-            "Motivo de consulta:", txtMotivo,
-        };
-
-        if (javax.swing.JOptionPane.showConfirmDialog(this, mensaje, 
-            "Agendar Nuevo Turno", javax.swing.JOptionPane.OK_CANCEL_OPTION) 
-            == javax.swing.JOptionPane.OK_OPTION) {
-
-            String hora = txtHora.getText().trim();
-            String nombre = txtNombre.getText().trim();
-            String dni = txtDni.getText().trim();
-            String telefono = txtTelefono.getText().trim();
-            String obraSocial = txtObraSocial.getText().trim();
-            String motivo = txtMotivo.getText().trim();
-
-            if (!hora.isEmpty() && !nombre.isEmpty()) {
-                // Guardar en TurnoManager
-                TurnoManager.getInstancia().agregarTurno(hora, nombre, dni, telefono, obraSocial, motivo);
-
-                javax.swing.JOptionPane.showMessageDialog(this,
-                    "Turno agendado exitosamente para " + nombre + " a las " + hora);
-
-                // Abrir ventana de turnos para ver el resultado
-                JFrame_turnos ventanaTurnos = new JFrame_turnos();
-                ventanaTurnos.setVisible(true);
-                this.dispose();
-            } else {
-                javax.swing.JOptionPane.showMessageDialog(this, "Horario y nombre son obligstorios", "Campos requeridos", javax.swing.JOptionPane.WARNING_MESSAGE);
-            }
-        }  
-    }//GEN-LAST:event_jButton2ActionPerformed
-
+public javax.swing.JButton getBotonVerAgenda() {
+    return BotonVerAgenda;
+}
     /**
      * @param args the command line arguments
      */
@@ -254,30 +196,32 @@ public class MenuPrincipal extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(MenuPrincipal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(VistaMenuPrincipal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(MenuPrincipal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(VistaMenuPrincipal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(MenuPrincipal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(VistaMenuPrincipal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(MenuPrincipal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(VistaMenuPrincipal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new MenuPrincipal().setVisible(true);
+                new VistaMenuPrincipal().setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton BotonAgendarTurno;
+    private javax.swing.JButton BotonVerAgenda;
     private java.awt.Button button1;
-    private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

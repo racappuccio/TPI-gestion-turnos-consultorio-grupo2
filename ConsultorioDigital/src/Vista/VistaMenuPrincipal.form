@@ -105,7 +105,7 @@
                   </Group>
                   <EmptySpace min="-2" pref="39" max="-2" attributes="0"/>
                   <Component id="jPanel2" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace pref="26" max="32767" attributes="0"/>
+                  <EmptySpace max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -170,9 +170,9 @@
                   </Group>
                   <Group type="102" alignment="1" attributes="0">
                       <EmptySpace min="-2" pref="88" max="-2" attributes="0"/>
-                      <Component id="jButton2" min="-2" pref="231" max="-2" attributes="0"/>
+                      <Component id="BotonAgendarTurno" min="-2" pref="231" max="-2" attributes="0"/>
                       <EmptySpace max="32767" attributes="0"/>
-                      <Component id="jButton4" min="-2" pref="231" max="-2" attributes="0"/>
+                      <Component id="BotonVerAgenda" min="-2" pref="231" max="-2" attributes="0"/>
                       <EmptySpace min="-2" pref="88" max="-2" attributes="0"/>
                   </Group>
               </Group>
@@ -187,8 +187,8 @@
                       </Group>
                       <EmptySpace min="-2" pref="93" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="jButton2" alignment="3" min="-2" pref="88" max="-2" attributes="0"/>
-                          <Component id="jButton4" alignment="3" min="-2" pref="88" max="-2" attributes="0"/>
+                          <Component id="BotonAgendarTurno" alignment="3" min="-2" pref="88" max="-2" attributes="0"/>
+                          <Component id="BotonVerAgenda" alignment="3" min="-2" pref="88" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace pref="125" max="32767" attributes="0"/>
                   </Group>
@@ -196,7 +196,7 @@
             </DimensionLayout>
           </Layout>
           <SubComponents>
-            <Component class="javax.swing.JButton" name="jButton2">
+            <Component class="javax.swing.JButton" name="BotonAgendarTurno">
               <Properties>
                 <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="4d" green="46" red="15" type="rgb"/>
@@ -211,11 +211,8 @@
                 <Property name="alignmentX" type="float" value="10.0"/>
                 <Property name="alignmentY" type="float" value="19.0"/>
               </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton2ActionPerformed"/>
-              </Events>
             </Component>
-            <Component class="javax.swing.JButton" name="jButton4">
+            <Component class="javax.swing.JButton" name="BotonVerAgenda">
               <Properties>
                 <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="4d" green="46" red="15" type="rgb"/>
@@ -240,9 +237,6 @@
                   <Dimension value="[218, 42]"/>
                 </Property>
               </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton4ActionPerformed"/>
-              </Events>
             </Component>
             <Component class="javax.swing.JLabel" name="jLabel4">
               <Properties>

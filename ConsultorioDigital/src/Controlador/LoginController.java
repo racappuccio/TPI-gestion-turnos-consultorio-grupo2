@@ -1,20 +1,21 @@
 package Controlador;
 
-import Vista.JFrame_principal;
+import Vista.VistaLogin;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JOptionPane;
-import Vista.MenuPrincipal;
+import Vista.VistaMenuPrincipal;
+import Controlador.MenuController;
 import Modelo.RepositorioUsuarios;
 public class LoginController implements ActionListener {
 
-    private JFrame_principal vista; // La vista (interfaz gráfica)
+    private VistaLogin vista; // La vista (interfaz gráfica)
     /**
      * Constructor del controlador.
      * @param vista La instancia del JFrame principal.
      * @param modelo La instancia del modelo Usuario (o una clase de acceso a datos de usuario).
      */
-    public LoginController(JFrame_principal vista) {
+    public LoginController(VistaLogin vista) {
         this.vista = vista;
       //  this.modelo = modelo;
         // Inicializa la escucha de eventos de la vista
@@ -22,9 +23,9 @@ public class LoginController implements ActionListener {
     }
 
 
-    /**
-     * Configura los ActionListeners para los componentes de la vista.
-     */
+    
+     // Configura los ActionListeners para los componentes de la vista.
+     
     public void iniciarControl() {
         // Asigna el controlador como el ActionListener del botón de inicio de sesión
         // Suponemos que el botón se llama 'jButton1' en JFrame_principal
@@ -37,7 +38,7 @@ public class LoginController implements ActionListener {
         
         // Si quisieras que el controlador manejara también el texto por defecto en los campos:
         // this.vista.getjTextField1().setText("Ingrese Usuario"); 
-        // this.vista.getjTextField2().setText("Contraseña"); 
+        // this.vista.getjTextField2().setText("Contraseña");  
     }
 
     /**
@@ -75,21 +76,23 @@ private void iniciarSesion() {
         // Credenciales correctas
         JOptionPane.showMessageDialog(vista, "¡Inicio de Sesión Exitoso!", "Bienvenido", JOptionPane.INFORMATION_MESSAGE);
 
-        // 🚀 Lógica de Navegación (CORREGIDA) 🚀
+       // 1. Crear una instancia de la ventana del menú principal (LA VISTA)
+        VistaMenuPrincipal vistaMenu = new VistaMenuPrincipal(); 
         
-        // 1. Crear una instancia de la ventana del menú principal
-        MenuPrincipal menu = new MenuPrincipal(); // ⬅️ Nombre CORREGIDO
+        // 2. Crear el Controlador del Menú y CONECTARLO CON LA VISTA
+        MenuController menuController = new MenuController(vistaMenu);
         
-        // 2. Hacer visible la nueva ventana
-        menu.setVisible(true);
-
-        // 3. Cerrar la ventana de login actual
+        // 3. Iniciar el Controlador (Muestra la vista y ACTIVA los listeners)
+        menuController.iniciar(); 
+        
+        // 4. Cerrar la ventana de login actual (DEBE SER LO ÚLTIMO)
         vista.dispose();
-       
+        
     } else {
         // Credenciales incorrectas
         JOptionPane.showMessageDialog(vista, "Usuario o contraseña incorrectos", "Error de Login", JOptionPane.ERROR_MESSAGE);
     }
+
 }
 }
 

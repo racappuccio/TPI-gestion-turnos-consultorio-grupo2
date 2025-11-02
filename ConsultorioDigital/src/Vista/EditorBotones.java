@@ -1,4 +1,4 @@
-package Vista;
+/*package Vista;
 
 
 import Modelo.Turno;
@@ -243,5 +243,5 @@ public class EditorBotones extends DefaultCellEditor {
                 
                       
     }
-}
+}*/
 
