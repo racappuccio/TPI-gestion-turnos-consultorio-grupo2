@@ -92,6 +92,7 @@ package Modelo;
 import java.time.LocalDate;
 import java.util.*;
 
+
 public class TurnoManager {
     private static TurnoManager instancia;
     private Map<LocalDate, List<Turno0>> turnosPorFecha;
@@ -99,6 +100,8 @@ public class TurnoManager {
     private TurnoManager() {
         turnosPorFecha = new HashMap<>();
     }
+   
+
 
     public static TurnoManager getInstancia() {
         if (instancia == null) {
@@ -181,4 +184,6 @@ public class TurnoManager {
         }
         return null;
     }
+
+    
 }

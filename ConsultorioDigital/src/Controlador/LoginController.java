@@ -1,20 +1,22 @@
 package Controlador;
 
-import Vista.JFrame_principal;
+import Vista.VistaLogin;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JOptionPane;
-import Vista.MenuPrincipal;
+//import Vista.MenuPrincipal;
 import Modelo.RepositorioUsuarios;
+import Vista.VistaListaDeTurnos;
+
 public class LoginController implements ActionListener {
 
-    private JFrame_principal vista; // La vista (interfaz gráfica)
+    private VistaLogin vista; // La vista (interfaz gráfica)
     /**
      * Constructor del controlador.
      * @param vista La instancia del JFrame principal.
      * @param modelo La instancia del modelo Usuario (o una clase de acceso a datos de usuario).
      */
-    public LoginController(JFrame_principal vista) {
+    public LoginController(VistaLogin vista) {
         this.vista = vista;
       //  this.modelo = modelo;
         // Inicializa la escucha de eventos de la vista
@@ -71,21 +73,24 @@ private void iniciarSesion() {
     // 3. Buscar y validar credenciales
     Modelo.Usuario user = Modelo.RepositorioUsuarios.buscarUsuario(usuario);
 
-    if (user != null && user.checkPassword(contrasena)) {
+   if (user != null && user.checkPassword(contrasena)) {
         // Credenciales correctas
         JOptionPane.showMessageDialog(vista, "¡Inicio de Sesión Exitoso!", "Bienvenido", JOptionPane.INFORMATION_MESSAGE);
 
         // 🚀 Lógica de Navegación (CORREGIDA) 🚀
-        
-        // 1. Crear una instancia de la ventana del menú principal
-        MenuPrincipal menu = new MenuPrincipal(); // ⬅️ Nombre CORREGIDO
-        
-        // 2. Hacer visible la nueva ventana
-        menu.setVisible(true);
 
-        // 3. Cerrar la ventana de login actual
+        // 1. Crear una instancia de la ventana de Lista de Turnos
+        VistaListaDeTurnos listaTurnos = new VistaListaDeTurnos(); 
+        
+        // 2. La VistaListaDeTurnos ya debería crear su propio controlador
+        // (Como se ve en tu código anterior: this.controller = new ListaController(this); )
+        
+        // 3. Hacer visible la nueva ventana (Lista de Turnos)
+        listaTurnos.setVisible(true);
+
+        // 4. Cerrar la ventana de login actual
         vista.dispose();
-       
+        
     } else {
         // Credenciales incorrectas
         JOptionPane.showMessageDialog(vista, "Usuario o contraseña incorrectos", "Error de Login", JOptionPane.ERROR_MESSAGE);

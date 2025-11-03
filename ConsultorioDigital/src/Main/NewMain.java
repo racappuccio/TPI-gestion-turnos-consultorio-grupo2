@@ -1,6 +1,6 @@
 package Main;
 
-import Vista.JFrame_principal;
+import Vista.VistaLogin;
 import Controlador.LoginController; // Asegúrate de importar el controlador
 
 /**
@@ -20,7 +20,7 @@ public class NewMain {
                 }
             }
         } catch (Exception ex) { 
-            java.util.logging.Logger.getLogger(JFrame_principal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(VistaLogin.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
 
         // 2. Iniciar la aplicación en el hilo de despacho de eventos (EDT)
@@ -28,7 +28,7 @@ public class NewMain {
             public void run() {
                 
                 // 3. Crear la Vista (GUI del Login)
-                JFrame_principal vistaLogin = new JFrame_principal();
+                VistaLogin vistaLogin = new VistaLogin();
                 
                 // 4. Crear el Controlador y conectarlo con la Vista.
                 // El Controlador accede directamente al RepositorioUsuarios (Modelo).

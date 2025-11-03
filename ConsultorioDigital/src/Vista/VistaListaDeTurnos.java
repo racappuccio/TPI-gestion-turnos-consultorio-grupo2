@@ -10,18 +10,26 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import javax.swing.JScrollPane;
 import javax.swing.table.DefaultTableModel;
+import Controlador.ListaController;
 
-public class JFrame_turnos extends javax.swing.JFrame {
+public class VistaListaDeTurnos extends javax.swing.JFrame {
+    private ListaController controller; //
 
-    public JFrame_turnos() {
+    public VistaListaDeTurnos() {
         initComponents();
+        
+        // 1. Instanciar el Controller. Pasa 'this' para que el controlador pueda interactuar.
+        this.controller = new ListaController(this);
+        
+                
         
         fechaActual = LocalDate.now();
         jLabel1.setText("Turnos del día - " + fechaActual.format(formatoFecha));
         System.out.println("Turnos del dia - " + fechaActual.format(DateTimeFormatter.ofPattern("dd/MM")));
         // --- personalización visual de la tabla ---
-        jScrollPane1.setColumnHeader(null);
+        TablaTurnos.setColumnHeader(null);
 
         // Aplicar renderer personalizado para colorear (versión inline)
         DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer() {
@@ -53,7 +61,9 @@ public class JFrame_turnos extends javax.swing.JFrame {
 
         // Configurar botones en la columna Acciones
         jTable1.getColumnModel().getColumn(3).setCellRenderer(new RenderBotones());
-        jTable1.getColumnModel().getColumn(3).setCellEditor(new EditorBotones(new JCheckBox(), jTable1, fechaActual));
+ jTable1.getColumnModel().getColumn(3).setCellEditor(
+    new Vista.EditorBotones(new JCheckBox(), jTable1, fechaActual, this.controller)
+);
 
         // Ajustar ancho de columnas
         jTable1.getColumnModel().getColumn(0).setPreferredWidth(100);
@@ -96,18 +106,18 @@ public class JFrame_turnos extends javax.swing.JFrame {
     }
 }
     
-    private void actualizarFechaYTurnos() {
-        // Actualizar título con la fecha
-        jLabel1.setText("Turnos del día - " + fechaActual.format(formatoFecha));
+  private void actualizarFechaYTurnos() {
+    // 1. Actualizar título con la fecha
+    jLabel1.setText("Turnos del día - " + fechaActual.format(formatoFecha));
     
-        // Actualizar el editor con la nueva fecha
-        jTable1.getColumnModel().getColumn(3).setCellEditor(
-            new EditorBotones(new JCheckBox(), jTable1, fechaActual)
-        );
+    // 2. Actualizar el editor con la nueva fecha
+    jTable1.getColumnModel().getColumn(3).setCellEditor( // Usa jTable1 directamente
+        new EditorBotones(new JCheckBox(), jTable1, fechaActual, this.controller) // Usa this.controller
+    );
     
-        // Recargar turnos
-        cargarHorariosDelDia();
-    }
+    // 3. Recargar turnos
+    cargarHorariosDelDia();
+}
 
 
     /**
@@ -121,15 +131,15 @@ public class JFrame_turnos extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        BotonDiaAnterio = new javax.swing.JButton();
+        BotonDiaSiguiente = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
-        jScrollPane1 = new javax.swing.JScrollPane();
+        TablaTurnos = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -138,21 +148,21 @@ public class JFrame_turnos extends javax.swing.JFrame {
 
         jPanel2.setBackground(new java.awt.Color(239, 239, 232));
 
-        jButton1.setBackground(new java.awt.Color(21, 70, 77));
-        jButton1.setFont(new java.awt.Font("Yu Gothic UI Semibold", 1, 16)); // NOI18N
-        jButton1.setText("Día anterior");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        BotonDiaAnterio.setBackground(new java.awt.Color(21, 70, 77));
+        BotonDiaAnterio.setFont(new java.awt.Font("Yu Gothic UI Semibold", 1, 16)); // NOI18N
+        BotonDiaAnterio.setText("Día anterior");
+        BotonDiaAnterio.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                BotonDiaAnterioActionPerformed(evt);
             }
         });
 
-        jButton2.setBackground(new java.awt.Color(21, 70, 77));
-        jButton2.setFont(new java.awt.Font("Yu Gothic UI Semibold", 0, 16)); // NOI18N
-        jButton2.setText("Día siguiente");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        BotonDiaSiguiente.setBackground(new java.awt.Color(21, 70, 77));
+        BotonDiaSiguiente.setFont(new java.awt.Font("Yu Gothic UI Semibold", 0, 16)); // NOI18N
+        BotonDiaSiguiente.setText("Día siguiente");
+        BotonDiaSiguiente.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                BotonDiaSiguienteActionPerformed(evt);
             }
         });
 
@@ -181,8 +191,8 @@ public class JFrame_turnos extends javax.swing.JFrame {
         jLabel5.setForeground(new java.awt.Color(21, 70, 77));
         jLabel5.setText("Acciones");
 
-        jScrollPane1.setBackground(new java.awt.Color(239, 239, 232));
-        jScrollPane1.setForeground(new java.awt.Color(239, 239, 232));
+        TablaTurnos.setBackground(new java.awt.Color(239, 239, 232));
+        TablaTurnos.setForeground(new java.awt.Color(239, 239, 232));
 
         jTable1.setBackground(new java.awt.Color(239, 239, 232));
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
@@ -196,7 +206,7 @@ public class JFrame_turnos extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        TablaTurnos.setViewportView(jTable1);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -215,14 +225,14 @@ public class JFrame_turnos extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                 .addGap(40, 40, 40)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jScrollPane1)
+                    .addComponent(TablaTurnos)
                     .addComponent(jSeparator1)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(BotonDiaAnterio, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 303, Short.MAX_VALUE)
                         .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 485, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(293, 293, 293)
-                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(BotonDiaSiguiente, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(41, 41, 41))
         );
         jPanel2Layout.setVerticalGroup(
@@ -232,8 +242,8 @@ public class JFrame_turnos extends javax.swing.JFrame {
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(39, 39, 39)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(BotonDiaSiguiente, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(BotonDiaAnterio, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(43, 43, 43)
                         .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -246,7 +256,7 @@ public class JFrame_turnos extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(TablaTurnos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(93, Short.MAX_VALUE))
         );
 
@@ -284,18 +294,16 @@ public class JFrame_turnos extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt){
-        fechaActual = fechaActual.minusDays(1);
-        actualizarFechaYTurnos();  
+controller.diaAnterior();
     }
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        fechaActual = fechaActual.plusDays(1);
-        actualizarFechaYTurnos();
-    }//GEN-LAST:event_jButton2ActionPerformed
-/*
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton1ActionPerformed
-*/
+    private void BotonDiaSiguienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonDiaSiguienteActionPerformed
+        controller.diaSiguiente(); // Llamar al Controller
+    }//GEN-LAST:event_BotonDiaSiguienteActionPerformed
+
+    private void BotonDiaAnterioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonDiaAnterioActionPerformed
+        controller.diaAnterior();
+    }//GEN-LAST:event_BotonDiaAnterioActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -313,27 +321,31 @@ public class JFrame_turnos extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(JFrame_turnos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(VistaListaDeTurnos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(JFrame_turnos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(VistaListaDeTurnos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(JFrame_turnos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(VistaListaDeTurnos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(JFrame_turnos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(VistaListaDeTurnos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new JFrame_turnos().setVisible(true);
+                new VistaListaDeTurnos().setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
+    private javax.swing.JButton BotonDiaAnterio;
+    private javax.swing.JButton BotonDiaSiguiente;
+    private javax.swing.JScrollPane TablaTurnos;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -341,11 +353,19 @@ public class JFrame_turnos extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JTable jTable1;
     // End of variables declaration//GEN-END:variables
 
     private LocalDate fechaActual;
     private final DateTimeFormatter formatoFecha = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+    private ListaController controlador;
+
+public javax.swing.JTable getjTable1() {
+        return jTable1;
+    }
+
+    public javax.swing.JLabel getjLabel1() {
+        return jLabel1;
+    }
 }
