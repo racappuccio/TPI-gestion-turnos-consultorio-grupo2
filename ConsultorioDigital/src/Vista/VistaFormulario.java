@@ -4,20 +4,33 @@
  */
 package Vista;
 
+import Controlador.ListaController;
+import Modelo.Turno0;
+import java.awt.TextArea;
+
+
 /**
  *
  * @author adrie
  */
 public class VistaFormulario extends javax.swing.JFrame {
 
+    
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(VistaFormulario.class.getName());
 
     /**
-     * Creates new form Formulario
+     * Creates new form NewJFrame
      */
-    public VistaFormulario() {
+    public VistaFormulario(Turno0 turno, ListaController controller) {
         initComponents();
+        precargarDatos(turno);
     }
+
+    private VistaFormulario() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+    
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -28,16 +41,7 @@ public class VistaFormulario extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jTextField6 = new javax.swing.JTextField();
-        jSpinner1 = new javax.swing.JSpinner();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jTextPane1 = new javax.swing.JTextPane();
-        jTextField7 = new javax.swing.JTextField();
-        button1 = new java.awt.Button();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        CompoMotivo = new javax.swing.JTextArea();
-        scrollbar1 = new java.awt.Scrollbar();
-        filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 32767));
+
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
@@ -50,43 +54,14 @@ public class VistaFormulario extends javax.swing.JFrame {
         CampoTelefono = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
         CampoObraSocial = new javax.swing.JTextField();
-        jLabel7 = new javax.swing.JLabel();
-        jLabel8 = new javax.swing.JLabel();
+
         jLabel9 = new javax.swing.JLabel();
-        CampoHora = new javax.swing.JSpinner();
-        jLabel10 = new javax.swing.JLabel();
-        textArea1 = new java.awt.TextArea();
-        fecha = new com.toedter.calendar.JDateChooser();
+        CampoMotivo = new java.awt.TextArea();
         jLabel1 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
+        BotonGuardar = new javax.swing.JButton();
         BotonAtras = new javax.swing.JButton();
         BotonCancelar = new javax.swing.JButton();
 
-        jTextField6.setBackground(new java.awt.Color(255, 255, 255));
-
-        jScrollPane1.setViewportView(jTextPane1);
-
-        jTextField7.setBackground(new java.awt.Color(255, 255, 255));
-        jTextField7.setForeground(new java.awt.Color(153, 153, 153));
-        jTextField7.setText("INGRESE EL NOMBRE DEL PACIENTE");
-
-        button1.setLabel("button1");
-
-        CompoMotivo.setBackground(new java.awt.Color(255, 255, 255));
-        CompoMotivo.setColumns(20);
-        CompoMotivo.setForeground(new java.awt.Color(153, 153, 153));
-        CompoMotivo.setRows(5);
-        CompoMotivo.setText("Ingrese motivo de la consulta");
-        CompoMotivo.setToolTipText("");
-        CompoMotivo.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
-                CompoMotivoFocusGained(evt);
-            }
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                CompoMotivoFocusLost(evt);
-            }
-        });
-        jScrollPane2.setViewportView(CompoMotivo);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -200,36 +175,18 @@ public class VistaFormulario extends javax.swing.JFrame {
             }
         });
 
-        jLabel7.setBackground(new java.awt.Color(0, 0, 0));
-        jLabel7.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        jLabel7.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel7.setText("Fecha:");
-
-        jLabel8.setBackground(new java.awt.Color(0, 0, 0));
-        jLabel8.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        jLabel8.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel8.setText("Hora:");
 
         jLabel9.setBackground(new java.awt.Color(0, 0, 0));
         jLabel9.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jLabel9.setForeground(new java.awt.Color(0, 0, 0));
         jLabel9.setText("Motivo de consulta:");
 
-        CampoHora.setModel(new javax.swing.SpinnerListModel(new String[] {"8:00 am", "8:30 am", "9:00 am", "9:30 am", "10:00 am", "10:30 am", "11:00 am", "11:30 am", "12:00 am", "12:30 am", "13:00 am", "13:30 am", "14:00 am", "14:30 am", "15:00 am", "15:30 am", "16:00 am", "16:30 am", "17:00 am", "17:30 am"}));
 
-        jLabel10.setBackground(new java.awt.Color(255, 255, 255));
-        jLabel10.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel10.setForeground(new java.awt.Color(51, 51, 51));
-        jLabel10.setText("seleccione la hora");
-
-        textArea1.addFocusListener(new java.awt.event.FocusAdapter() {
+        CampoMotivo.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
-                textArea1FocusGained(evt);
+                CampoMotivoFocusGained(evt);
             }
         });
-
-        fecha.setBackground(new java.awt.Color(255, 255, 255));
-
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -239,14 +196,20 @@ public class VistaFormulario extends javax.swing.JFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(49, 49, 49)
+
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(49, 49, 49))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                                .addComponent(jLabel9)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(fecha, javax.swing.GroupLayout.PREFERRED_SIZE, 229, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(CampoTelefono, javax.swing.GroupLayout.PREFERRED_SIZE, 236, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(CampoObraSocial, javax.swing.GroupLayout.PREFERRED_SIZE, 236, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(CampoObraSocial, javax.swing.GroupLayout.PREFERRED_SIZE, 236, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(CampoMotivo, javax.swing.GroupLayout.PREFERRED_SIZE, 238, javax.swing.GroupLayout.PREFERRED_SIZE)))
+
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(49, 49, 49)
@@ -258,18 +221,10 @@ public class VistaFormulario extends javax.swing.JFrame {
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(49, 49, 49)
-                        .addComponent(CampoDNI, javax.swing.GroupLayout.PREFERRED_SIZE, 236, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jLabel9)
-                        .addGap(19, 19, 19)
-                        .addComponent(textArea1, javax.swing.GroupLayout.PREFERRED_SIZE, 238, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(56, 56, 56)
-                        .addComponent(jLabel10)
-                        .addGap(9, 9, 9)
-                        .addComponent(CampoHora, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(29, Short.MAX_VALUE))
+
+                        .addComponent(CampoDNI, javax.swing.GroupLayout.PREFERRED_SIZE, 236, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(36, Short.MAX_VALUE))
+
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -305,38 +260,28 @@ public class VistaFormulario extends javax.swing.JFrame {
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(CampoObraSocial, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)))
+
+                .addGap(35, 35, 35)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(10, 10, 10)
-                        .addComponent(jLabel7))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(fecha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(13, 13, 13)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel8)
-                    .addComponent(jLabel10)
-                    .addComponent(CampoHora, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(9, 9, 9)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(9, 9, 9)
-                        .addComponent(textArea1, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(22, Short.MAX_VALUE))
+                    .addComponent(CampoMotivo, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(26, Short.MAX_VALUE))
+
         );
 
         jLabel1.setFont(new java.awt.Font("Arial Black", 0, 24)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(135, 174, 174));
         jLabel1.setText("Ingrese los datos del paciente ");
 
-        jButton1.setBackground(new java.awt.Color(169, 186, 169));
-        jButton1.setFont(new java.awt.Font("Arial Black", 0, 14)); // NOI18N
-        jButton1.setForeground(new java.awt.Color(51, 51, 51));
-        jButton1.setText("Guardar");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+
+        BotonGuardar.setBackground(new java.awt.Color(169, 186, 169));
+        BotonGuardar.setFont(new java.awt.Font("Arial Black", 0, 14)); // NOI18N
+        BotonGuardar.setForeground(new java.awt.Color(51, 51, 51));
+        BotonGuardar.setText("Guardar");
+        BotonGuardar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                BotonGuardarActionPerformed(evt);
+
             }
         });
 
@@ -371,7 +316,9 @@ public class VistaFormulario extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(BotonCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(58, 58, 58)
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)
+
+                        .addComponent(BotonGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)
+
                         .addGap(49, 49, 49)))
                 .addContainerGap(51, Short.MAX_VALUE))
         );
@@ -382,11 +329,13 @@ public class VistaFormulario extends javax.swing.JFrame {
                 .addComponent(BotonAtras)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(36, 36, 36)
-                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 36, Short.MAX_VALUE)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(68, 68, 68)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(BotonGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+
                     .addComponent(BotonCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(22, 22, 22))
         );
@@ -411,13 +360,7 @@ public class VistaFormulario extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void CampoDNIActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CampoDNIActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_CampoDNIActionPerformed
 
-    private void CampoTelefonoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CampoTelefonoActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_CampoTelefonoActionPerformed
 
     private void CampoNombreFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_CampoNombreFocusGained
         if (CampoNombre.getText().equals("Ingrese el nombre del paciente")) {
@@ -451,6 +394,12 @@ public class VistaFormulario extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_CampoApellidoFocusLost
 
+
+    private void CampoApellidoActionPerformed(java.awt.event.ActionEvent evt) {                                              
+        // TODO add your handling code here:
+    }                                             
+
+
     private void CampoDNIFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_CampoDNIFocusGained
 
         if (CampoDNI.getText().equals("Ingrese el DNI del paciente")) {
@@ -466,9 +415,11 @@ public class VistaFormulario extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_CampoDNIFocusLost
 
-    private void CampoApellidoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CampoApellidoActionPerformed
+
+    private void CampoDNIActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CampoDNIActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_CampoApellidoActionPerformed
+    }//GEN-LAST:event_CampoDNIActionPerformed
+
 
     private void CampoTelefonoFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_CampoTelefonoFocusGained
         if (CampoTelefono.getText().equals("Ingrese el telefono del paciente")) {
@@ -484,6 +435,12 @@ public class VistaFormulario extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_CampoTelefonoFocusLost
 
+
+    private void CampoTelefonoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CampoTelefonoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_CampoTelefonoActionPerformed
+
+
     private void CampoObraSocialFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_CampoObraSocialFocusGained
         if (CampoObraSocial.getText().equals("Ingrese la obra social del paciente")) {
             CampoObraSocial.setText("");
@@ -495,36 +452,34 @@ public class VistaFormulario extends javax.swing.JFrame {
         if (CampoObraSocial.getText().isEmpty()) {
             CampoObraSocial.setText("Ingrese la obra social del paciente");
             CampoObraSocial.setForeground(new java.awt.Color(153, 153, 153)); // Color de sugerencia (gris)
-       
-        }
-    }//GEN-LAST:event_CampoObraSocialFocusLost
 
-    private void CompoMotivoFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_CompoMotivoFocusGained
-          if (CompoMotivo.getText().equals("Ingrese motivo de la consulta")) {
-            CompoMotivo.setText("");
-            CompoMotivo.setForeground(new java.awt.Color(0, 0, 0)); // Color de texto normal (gris)
         }
-    }//GEN-LAST:event_CompoMotivoFocusGained
+    }                                         
 
-    private void CompoMotivoFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_CompoMotivoFocusLost
-        if (CompoMotivo.getText().isEmpty()) {
-            CompoMotivo.setText("Ingrese motivo de la consulta");
-            CompoMotivo.setForeground(new java.awt.Color(153, 153, 153)); // Color de sugerencia (gris)
-       
-        }
-    }//GEN-LAST:event_CompoMotivoFocusLost
-
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void CampoMotivoFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_CampoMotivoFocusGained
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_CampoMotivoFocusGained
 
-    private void textArea1FocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_textArea1FocusGained
+    private void BotonGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonGuardarActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_textArea1FocusGained
+    }//GEN-LAST:event_BotonGuardarActionPerformed
+
 
     private void BotonCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonCancelarActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_BotonCancelarActionPerformed
+
+
+    // Constructor adicional para recibir fecha, hora y el controlador
+public VistaFormulario(java.time.LocalDate fecha, String hora, Controlador.ListaController controller) {
+     // 🟢 Llama directamente a la inicialización de los componentes
+    initComponents(); 
+    
+    // Llama al constructor vacío para inicializar los componentes
+    // Si querés mostrar la fecha y hora en el formulario, podés hacerlo así:
+    setTitle("Formulario - Turno del " + fecha + " a las " + hora);
+}
+
 
     /**
      * @param args the command line arguments
@@ -554,45 +509,89 @@ public class VistaFormulario extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton BotonAtras;
     private javax.swing.JButton BotonCancelar;
+
+    private javax.swing.JButton BotonGuardar;
     private javax.swing.JTextField CampoApellido;
     private javax.swing.JTextField CampoDNI;
-    private javax.swing.JSpinner CampoHora;
+    private java.awt.TextArea CampoMotivo;
     private javax.swing.JTextField CampoNombre;
     private javax.swing.JTextField CampoObraSocial;
     private javax.swing.JTextField CampoTelefono;
-    private javax.swing.JTextArea CompoMotivo;
-    private java.awt.Button button1;
-    private com.toedter.calendar.JDateChooser fecha;
-    private javax.swing.Box.Filler filler1;
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel10;
+
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
+
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JSpinner jSpinner1;
-    private javax.swing.JTextField jTextField6;
-    private javax.swing.JTextField jTextField7;
-    private javax.swing.JTextPane jTextPane1;
-    private java.awt.Scrollbar scrollbar1;
-    private java.awt.TextArea textArea1;
     // End of variables declaration//GEN-END:variables
 
-public javax.swing.JButton getBotonAtras() {
-return BotonAtras; // O el nombre real de tu variable de botón
+    public javax.swing.JButton getBotonAtras() { // <-- CORRECCIÓN AQUÍ
+    return BotonAtras;
 }
 
-// Método para que el controlador pueda obtener el botón "Cancelar"
-public javax.swing.JButton getBotonCancelar() {
-return BotonCancelar; // O el nombre real de tu variable de botón
+public javax.swing.JButton getBotonCancelar() { // <-- CORRECCIÓN AQUÍ
+    return BotonCancelar;
+}
+
+public javax.swing.JButton getBotonGuardar() { // <-- CORRECCIÓN AQUÍ
+    return BotonGuardar;
+}
+
+    public javax.swing.JTextField getCampoNombre() {
+        return  CampoNombre;
+    }
+
+    public javax.swing.JTextField getCampoApellido() {
+        return  CampoApellido;
+    }
+
+    public javax.swing.JTextField getCampoDNI() {
+return  CampoDNI;
+    }
+
+    public javax.swing.JTextField getCampoTelefono() {
+        return  CampoTelefono;
+    }
+
+    public javax.swing.JTextField getCampoObraSocial() {
+        return CampoObraSocial;
+    }
+
+   public TextArea getCampoMotivo() {
+    return CampoMotivo; // Asumiendo que tu variable es JTextArea
+}
+
+    private void precargarDatos(Turno0 turno) {
+    // 1. Manejar el Nombre y Apellido (asumiendo que están unidos por un espacio)
+    String nombreCompleto = turno.getNombre();
+    String[] partes = nombreCompleto.split(" ", 2); // Divide Nombre y Apellido
+
+    // Asegúrate de que tus Getters (getCampoNombre, etc.) devuelvan el tipo correcto (JTextField/JTextArea)
+    
+    // Precarga el Nombre
+    getCampoNombre().setText(partes[0]);
+    
+    // Precarga el Apellido (si existe una segunda parte)
+    if (partes.length > 1) {
+        getCampoApellido().setText(partes[1]);
+    } else {
+        getCampoApellido().setText(""); 
+    }
+
+    // 2. Precargar el resto de los campos
+    getCampoDNI().setText(turno.getDni());
+    getCampoTelefono().setText(turno.getTelefono());
+    getCampoObraSocial().setText(turno.getObraSocial());
+    getCampoMotivo().setText(turno.getMotivo()); // Si este es un JTextArea, funcionará bien.
+    
+    // 3. Opcional: Deshabilitar los campos de Fecha/Hora si la modificación no los permite
+    // getCampoFecha().setEnabled(false);
+    // getCampoHora().setEnabled(false);
+
 }
 }

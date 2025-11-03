@@ -1,93 +1,106 @@
 package Vista;
 
-
-import Modelo.Turno;
+import Modelo.Turno0;
 import Modelo.TurnoManager;
 import java.awt.Color;
 import java.awt.Component;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JTable;
-import javax.swing.table.DefaultTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
-
-
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import javax.swing.JScrollPane;
+import javax.swing.table.DefaultTableModel;
+import Controlador.ListaController;
 
 public class VistaListaDeTurnos extends javax.swing.JFrame {
+    private ListaController controller; 
 
-    /**
-     * Creates new form JFrame_turnos
-*/     
     public VistaListaDeTurnos() {
-    initComponents();
-    
-    // --- personalización visual de la tabla ---
-    jScrollPane1.setColumnHeader(null);
-    
-    // Aplicar renderer personalizado para colorear (versión inline)
-    DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer() {
-        @Override
-        public Component getTableCellRendererComponent(JTable table, Object value,
-                boolean isSelected, boolean hasFocus, int row, int column) {
+        initComponents();
+        
+        // 1. Instanciar el Controller. Pasa 'this' para que el controlador pueda interactuar.
+        this.controller = new ListaController(this);
+        
+                
+        
+        fechaActual = LocalDate.now();
+        jLabel1.setText("Turnos del día - " + fechaActual.format(formatoFecha));
+        System.out.println("Turnos del dia - " + fechaActual.format(DateTimeFormatter.ofPattern("dd/MM")));
+        // --- personalización visual de la tabla ---
+        TablaTurnos.setColumnHeader(null);
 
-            Component cell = super.getTableCellRendererComponent(
-                table, value, isSelected, hasFocus, row, column);
 
-            String nombre = (String) table.getValueAt(row, 1);
+        // Aplicar renderer personalizado para colorear (versión inline)
+        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer() {
+            @Override
+            public Component getTableCellRendererComponent(JTable table, Object value,
+                    boolean isSelected, boolean hasFocus, int row, int column) {
 
-            if (nombre != null && nombre.equalsIgnoreCase("Libre")) {
-                cell.setBackground(new Color(220, 240, 220));
-                cell.setForeground(new Color(100, 100, 100));
-            } else {
-                cell.setBackground(new Color(239, 239, 232));
-                cell.setForeground(new Color(21, 70, 77));
+                Component cell = super.getTableCellRendererComponent(
+                        table, value, isSelected, hasFocus, row, column);
+
+
+                String nombre = (String) table.getValueAt(row, 1);
+
+                if (nombre != null && nombre.equalsIgnoreCase("Libre")) {
+                    cell.setBackground(new Color(220, 240, 220));
+                    cell.setForeground(new Color(100, 100, 100));
+                } else {
+                    cell.setBackground(new Color(239, 239, 232));
+                    cell.setForeground(new Color(21, 70, 77));
+                }
+
+                setHorizontalAlignment(JLabel.CENTER);
+                return cell;
             }
+        };
 
-            setHorizontalAlignment(JLabel.CENTER);
-            return cell;
+        for (int i = 0; i < 3; i++) {
+            jTable1.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
         }
-    };
 
-    for (int i = 0; i < 3; i++){
-        jTable1.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
+        // Configurar botones en la columna Acciones
+        jTable1.getColumnModel().getColumn(3).setCellRenderer(new RenderBotones());
+ jTable1.getColumnModel().getColumn(3).setCellEditor(
+    new Vista.EditorBotones(new JCheckBox(), jTable1, fechaActual, this.controller)
+);
+
+        // Ajustar ancho de columnas
+        jTable1.getColumnModel().getColumn(0).setPreferredWidth(100);
+        jTable1.getColumnModel().getColumn(1).setPreferredWidth(300);
+        jTable1.getColumnModel().getColumn(2).setPreferredWidth(250);
+        jTable1.getColumnModel().getColumn(3).setPreferredWidth(350);
+
+        // Ajustar altura de filas
+        jTable1.setRowHeight(40);
+
+        jTable1.setTableHeader(null);
+        jTable1.setFont(new java.awt.Font("Yu Gothic UI", java.awt.Font.PLAIN, 18));
+        jTable1.setGridColor(new java.awt.Color(180, 214, 197));
+        jTable1.setShowHorizontalLines(false);
+        jTable1.setShowVerticalLines(false);
+
+        // --- Cargar horarios predefinidos ---
+        cargarHorariosDelDia();
+
+        // --- centrado y visibilidad ---
+        this.setLocationRelativeTo(null);
+        this.setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        this.setVisible(true);
     }
-    
-    // Configurar botones en la columna Acciones
-    jTable1.getColumnModel().getColumn(3).setCellRenderer(new RenderBotones());
-   // jTable1.getColumnModel().getColumn(3).setCellEditor(new EditorBotones(new JCheckBox(), jTable1));
 
-    // Ajustar ancho de columnas
-    jTable1.getColumnModel().getColumn(0).setPreferredWidth(100);
-    jTable1.getColumnModel().getColumn(1).setPreferredWidth(300);
-    jTable1.getColumnModel().getColumn(2).setPreferredWidth(250);
-    jTable1.getColumnModel().getColumn(3).setPreferredWidth(350);
-    
-    // Ajustar altura de filas
-    jTable1.setRowHeight(40);
-    
-    jTable1.setTableHeader(null);
-    jTable1.setFont(new java.awt.Font("Yu Gothic UI", java.awt.Font.PLAIN, 18));
-    jTable1.setGridColor(new java.awt.Color(180, 214, 197));
-    jTable1.setShowHorizontalLines(false);
-    jTable1.setShowVerticalLines(false);
 
-    // --- Cargar horarios predefinidos ---
-    cargarHorariosDelDia();
-
-    // --- centrado y visibilidad ---
-    this.setLocationRelativeTo(null);
-    this.setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-    this.setVisible(true);
-}
 
 // NUEVO MÉTODO - Cargar horarios del día
-private void cargarHorariosDelDia() {
+    private void cargarHorariosDelDia() {
     javax.swing.table.DefaultTableModel modelo =
         (javax.swing.table.DefaultTableModel) jTable1.getModel();
     modelo.setRowCount(0);
     
-    // Cargar desde TurnoManager
-    for (Turno turno : TurnoManager.getInstancia().getTurnos()) {
+    // Cargar turnos de la fecha actual desde TurnoManager
+    for (Turno0 turno : TurnoManager.getInstancia().getTurnosPorFecha(fechaActual)) {
         modelo.addRow(new Object[]{
             turno.getHora(),
           //  turno.getNombre(),
@@ -96,6 +109,20 @@ private void cargarHorariosDelDia() {
         });
     }
 }
+    
+  private void actualizarFechaYTurnos() {
+    // 1. Actualizar título con la fecha
+    jLabel1.setText("Turnos del día - " + fechaActual.format(formatoFecha));
+    
+    // 2. Actualizar el editor con la nueva fecha
+    jTable1.getColumnModel().getColumn(3).setCellEditor( // Usa jTable1 directamente
+        new EditorBotones(new JCheckBox(), jTable1, fechaActual, this.controller) // Usa this.controller
+    );
+    
+    // 3. Recargar turnos
+    cargarHorariosDelDia();
+}
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -108,15 +135,17 @@ private void cargarHorariosDelDia() {
 
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
-        DiaAnterior = new javax.swing.JButton();
-        DiaSiguiente = new javax.swing.JButton();
+
+        BotonDiaAnterio = new javax.swing.JButton();
+        BotonDiaSiguiente = new javax.swing.JButton();
+
         jLabel1 = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
-        jScrollPane1 = new javax.swing.JScrollPane();
+        TablaTurnos = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
         jButton3 = new javax.swing.JButton();
 
@@ -126,22 +155,31 @@ private void cargarHorariosDelDia() {
 
         jPanel2.setBackground(new java.awt.Color(239, 239, 232));
 
-        DiaAnterior.setBackground(new java.awt.Color(21, 70, 77));
-        DiaAnterior.setFont(new java.awt.Font("Yu Gothic UI Semibold", 1, 16)); // NOI18N
-        DiaAnterior.setText("Día anterior");
 
-        DiaSiguiente.setBackground(new java.awt.Color(21, 70, 77));
-        DiaSiguiente.setFont(new java.awt.Font("Yu Gothic UI Semibold", 0, 16)); // NOI18N
-        DiaSiguiente.setText("Día siguiente");
-        DiaSiguiente.addActionListener(new java.awt.event.ActionListener() {
+        BotonDiaAnterio.setBackground(new java.awt.Color(21, 70, 77));
+        BotonDiaAnterio.setFont(new java.awt.Font("Yu Gothic UI Semibold", 1, 16)); // NOI18N
+        BotonDiaAnterio.setText("Día anterior");
+        BotonDiaAnterio.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                DiaSiguienteActionPerformed(evt);
+             //iefioefionwo
+            }
+        });
+
+        BotonDiaSiguiente.setBackground(new java.awt.Color(21, 70, 77));
+        BotonDiaSiguiente.setFont(new java.awt.Font("Yu Gothic UI Semibold", 0, 16)); // NOI18N
+        BotonDiaSiguiente.setText("Día siguiente");
+        BotonDiaSiguiente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BotonDiaSiguienteActionPerformed(evt);
+
             }
         });
 
         jLabel1.setFont(new java.awt.Font("Century Gothic", 1, 36)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(21, 70, 77));
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("Turnos del día");
+        jLabel1.setPreferredSize(new java.awt.Dimension(800, 50));
 
         jSeparator1.setBackground(new java.awt.Color(21, 70, 77));
         jSeparator1.setForeground(new java.awt.Color(21, 70, 77));
@@ -162,8 +200,8 @@ private void cargarHorariosDelDia() {
         jLabel5.setForeground(new java.awt.Color(21, 70, 77));
         jLabel5.setText("Acciones");
 
-        jScrollPane1.setBackground(new java.awt.Color(239, 239, 232));
-        jScrollPane1.setForeground(new java.awt.Color(239, 239, 232));
+        TablaTurnos.setBackground(new java.awt.Color(239, 239, 232));
+        TablaTurnos.setForeground(new java.awt.Color(239, 239, 232));
 
         jTable1.setBackground(new java.awt.Color(239, 239, 232));
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
@@ -177,7 +215,7 @@ private void cargarHorariosDelDia() {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        TablaTurnos.setViewportView(jTable1);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -186,24 +224,26 @@ private void cargarHorariosDelDia() {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(117, 117, 117)
                 .addComponent(jLabel2)
-                .addGap(201, 201, 201)
+                .addGap(215, 215, 215)
                 .addComponent(jLabel3)
-                .addGap(289, 289, 289)
+                .addGap(295, 295, 295)
                 .addComponent(jLabel4)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 331, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel5)
                 .addGap(273, 273, 273))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                 .addGap(40, 40, 40)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jScrollPane1)
+                    .addComponent(TablaTurnos)
                     .addComponent(jSeparator1)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(DiaAnterior, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(261, 261, 261)
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 290, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(DiaSiguiente, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)))
+
+                        .addComponent(BotonDiaAnterio, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 303, Short.MAX_VALUE)
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 485, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(293, 293, 293)
+                        .addComponent(BotonDiaSiguiente, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)))
+
                 .addGap(41, 41, 41))
         );
         jPanel2Layout.setVerticalGroup(
@@ -213,12 +253,14 @@ private void cargarHorariosDelDia() {
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(39, 39, 39)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(DiaSiguiente, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(DiaAnterior, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)))
+
+                            .addComponent(BotonDiaSiguiente, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(BotonDiaAnterio, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)))
+
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(41, 41, 41)
+                        .addGap(43, 43, 43)
                         .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(48, 48, 48)
+                .addGap(46, 46, 46)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
                     .addComponent(jLabel3)
@@ -227,8 +269,10 @@ private void cargarHorariosDelDia() {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+
+                .addComponent(TablaTurnos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(93, Short.MAX_VALUE))
+
         );
 
         jButton3.setBackground(new java.awt.Color(180, 214, 197));
@@ -237,7 +281,7 @@ private void cargarHorariosDelDia() {
         jButton3.setText("Agendar turno");
         jButton3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
+                controller.abrirFormularioTurno(fechaActual, "Nuevo");
             }
         });
 
@@ -280,14 +324,19 @@ private void cargarHorariosDelDia() {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+/*
 
-    private void DiaSiguienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DiaSiguienteActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_DiaSiguienteActionPerformed
+    */private void jButton1ActionPerformed(java.awt.event.ActionEvent evt){
+controller.diaAnterior();
+    }
+    private void BotonDiaSiguienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonDiaSiguienteActionPerformed
+        controller.diaSiguiente(); // Llamar al Controller
+    }//GEN-LAST:event_BotonDiaSiguienteActionPerformed
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton3ActionPerformed
+    private void BotonDiaAnterioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonDiaAnterioActionPerformed
+        controller.diaAnterior();
+    }//GEN-LAST:event_BotonDiaAnterioActionPerformed
+
 
     /**
      * @param args the command line arguments
@@ -317,6 +366,9 @@ private void cargarHorariosDelDia() {
         //</editor-fold>
         //</editor-fold>
 
+        //</editor-fold>
+        //</editor-fold>
+
         // Create and display the form 
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
@@ -326,9 +378,11 @@ private void cargarHorariosDelDia() {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton DiaAnterior;
-    private javax.swing.JButton DiaSiguiente;
-    private javax.swing.JButton jButton3;
+
+    private javax.swing.JButton BotonDiaAnterio;
+    private javax.swing.JButton BotonDiaSiguiente;
+    private javax.swing.JScrollPane TablaTurnos;
+
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -336,8 +390,20 @@ private void cargarHorariosDelDia() {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JTable jTable1;
+    private javax.swing.JButton jButton3;
     // End of variables declaration//GEN-END:variables
+
+    private LocalDate fechaActual;
+    private final DateTimeFormatter formatoFecha = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+    
+
+public javax.swing.JTable getjTable1() {
+        return jTable1;
+    }
+
+    public javax.swing.JLabel getjLabel1() {
+        return jLabel1;
+    }
 }

@@ -4,10 +4,12 @@ import Vista.VistaLogin;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JOptionPane;
-//import Vista.VistaMenuPrincipal;
-//import Controlador.MenuController;
+
+//import Vista.MenuPrincipal;
 import Modelo.RepositorioUsuarios;
 import Vista.VistaListaDeTurnos;
+
+
 public class LoginController implements ActionListener {
 
     private VistaLogin vista; // La vista (interfaz gráfica)
@@ -73,23 +75,25 @@ private void iniciarSesion() {
     // 3. Buscar y validar credenciales
     Modelo.Usuario user = Modelo.RepositorioUsuarios.buscarUsuario(usuario);
 
-    if (user != null && user.checkPassword(contrasena)) {
+   if (user != null && user.checkPassword(contrasena)) {
         // Credenciales correctas
         JOptionPane.showMessageDialog(vista, "¡Inicio de Sesión Exitoso!", "Bienvenido", JOptionPane.INFORMATION_MESSAGE);
 
-       /// 1. Crear una instancia de la ventana de la lista de turnos (LA VISTA)
-        VistaListaDeTurnos vistaLista = new VistaListaDeTurnos();
-        vistaLista.setLocationRelativeTo(null);
+
+        // 🚀 Lógica de Navegación (CORREGIDA) 🚀
+
+        // 1. Crear una instancia de la ventana de Lista de Turnos
+        VistaListaDeTurnos listaTurnos = new VistaListaDeTurnos(); 
         
-        // 2. Crear el Controlador de la Lista y CONECTARLO CON LA VISTA
-        // (Debes crear esta clase ListaDeTurnosController si no existe)
-       // ListaDeTurnosController listaController = new ListaDeTurnosController(vistaLista);
+        // 2. La VistaListaDeTurnos ya debería crear su propio controlador
+        // (Como se ve en tu código anterior: this.controller = new ListaController(this); )
         
-        // 3. Iniciar el Controlador (Muestra la vista y ACTIVA los listeners)
-       // listaController.iniciar(); // Asumiendo que tienes un método iniciar()
-        
-        // 4. Cerrar la ventana de login actual (DEBE SER LO ÚLTIMO)
-        vista.dispose();;
+        // 3. Hacer visible la nueva ventana (Lista de Turnos)
+        listaTurnos.setVisible(true);
+
+        // 4. Cerrar la ventana de login actual
+        vista.dispose();
+
         
     } else {
         // Credenciales incorrectas
