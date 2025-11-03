@@ -1,10 +1,7 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 package Vista;
 
 import Modelo.TurnoManager;
+import java.time.LocalDate;
 public class MenuPrincipal extends javax.swing.JFrame {
 
     /**
@@ -198,8 +195,8 @@ public class MenuPrincipal extends javax.swing.JFrame {
         javax.swing.JTextField txtTelefono = new javax.swing.JTextField();
         javax.swing.JTextField txtObraSocial = new javax.swing.JTextField();
         javax.swing.JTextField txtMotivo = new javax.swing.JTextField();
+        javax.swing.JTextField txtFecha = new javax.swing.JTextField();
         
-
         Object[] mensaje = {
             "Horario (ej: 10:00):", txtHora,
             "Nombre del paciente:", txtNombre,
@@ -213,6 +210,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
             "Agendar Nuevo Turno", javax.swing.JOptionPane.OK_CANCEL_OPTION) 
             == javax.swing.JOptionPane.OK_OPTION) {
 
+            LocalDate fecha = LocalDate.parse(txtFecha.getText().trim());
             String hora = txtHora.getText().trim();
             String nombre = txtNombre.getText().trim();
             String dni = txtDni.getText().trim();
@@ -222,7 +220,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
 
             if (!hora.isEmpty() && !nombre.isEmpty()) {
                 // Guardar en TurnoManager
-                TurnoManager.getInstancia().agregarTurno(hora, nombre, dni, telefono, obraSocial, motivo);
+                TurnoManager.getInstancia().agregarTurno(fecha, hora, nombre, dni, telefono, obraSocial, motivo);
 
                 javax.swing.JOptionPane.showMessageDialog(this,
                     "Turno agendado exitosamente para " + nombre + " a las " + hora);

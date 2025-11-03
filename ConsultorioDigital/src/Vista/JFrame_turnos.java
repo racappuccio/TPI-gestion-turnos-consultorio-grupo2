@@ -1,93 +1,92 @@
 package Vista;
 
-
-import Modelo.Turno;
+import Modelo.Turno0;
 import Modelo.TurnoManager;
 import java.awt.Color;
 import java.awt.Component;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JTable;
-import javax.swing.table.DefaultTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
-
-
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import javax.swing.table.DefaultTableModel;
 
 public class JFrame_turnos extends javax.swing.JFrame {
 
-    /**
-     * Creates new form JFrame_turnos
-     */
     public JFrame_turnos() {
-    initComponents();
-    
-    // --- personalización visual de la tabla ---
-    jScrollPane1.setColumnHeader(null);
-    
-    // Aplicar renderer personalizado para colorear (versión inline)
-    DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer() {
-        @Override
-        public Component getTableCellRendererComponent(JTable table, Object value,
-                boolean isSelected, boolean hasFocus, int row, int column) {
+        initComponents();
+        
+        fechaActual = LocalDate.now();
+        jLabel1.setText("Turnos del día - " + fechaActual.format(formatoFecha));
+        System.out.println("Turnos del dia - " + fechaActual.format(DateTimeFormatter.ofPattern("dd/MM")));
+        // --- personalización visual de la tabla ---
+        jScrollPane1.setColumnHeader(null);
 
-            Component cell = super.getTableCellRendererComponent(
-                table, value, isSelected, hasFocus, row, column);
+        // Aplicar renderer personalizado para colorear (versión inline)
+        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer() {
+            @Override
+            public Component getTableCellRendererComponent(JTable table, Object value,
+                    boolean isSelected, boolean hasFocus, int row, int column) {
 
-            String nombre = (String) table.getValueAt(row, 1);
+                Component cell = super.getTableCellRendererComponent(
+                        table, value, isSelected, hasFocus, row, column);
 
-            if (nombre != null && nombre.equalsIgnoreCase("Libre")) {
-                cell.setBackground(new Color(220, 240, 220));
-                cell.setForeground(new Color(100, 100, 100));
-            } else {
-                cell.setBackground(new Color(239, 239, 232));
-                cell.setForeground(new Color(21, 70, 77));
+                String nombre = (String) table.getValueAt(row, 1);
+
+                if (nombre != null && nombre.equalsIgnoreCase("Libre")) {
+                    cell.setBackground(new Color(220, 240, 220));
+                    cell.setForeground(new Color(100, 100, 100));
+                } else {
+                    cell.setBackground(new Color(239, 239, 232));
+                    cell.setForeground(new Color(21, 70, 77));
+                }
+
+                setHorizontalAlignment(JLabel.CENTER);
+                return cell;
             }
+        };
 
-            setHorizontalAlignment(JLabel.CENTER);
-            return cell;
+        for (int i = 0; i < 3; i++) {
+            jTable1.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
         }
-    };
 
-    for (int i = 0; i < 3; i++){
-        jTable1.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
+        // Configurar botones en la columna Acciones
+        jTable1.getColumnModel().getColumn(3).setCellRenderer(new RenderBotones());
+        jTable1.getColumnModel().getColumn(3).setCellEditor(new EditorBotones(new JCheckBox(), jTable1, fechaActual));
+
+        // Ajustar ancho de columnas
+        jTable1.getColumnModel().getColumn(0).setPreferredWidth(100);
+        jTable1.getColumnModel().getColumn(1).setPreferredWidth(300);
+        jTable1.getColumnModel().getColumn(2).setPreferredWidth(250);
+        jTable1.getColumnModel().getColumn(3).setPreferredWidth(350);
+
+        // Ajustar altura de filas
+        jTable1.setRowHeight(40);
+
+        jTable1.setTableHeader(null);
+        jTable1.setFont(new java.awt.Font("Yu Gothic UI", java.awt.Font.PLAIN, 18));
+        jTable1.setGridColor(new java.awt.Color(180, 214, 197));
+        jTable1.setShowHorizontalLines(false);
+        jTable1.setShowVerticalLines(false);
+
+        // --- Cargar horarios predefinidos ---
+        cargarHorariosDelDia();
+
+        // --- centrado y visibilidad ---
+        this.setLocationRelativeTo(null);
+        this.setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        this.setVisible(true);
     }
-    
-    // Configurar botones en la columna Acciones
-    jTable1.getColumnModel().getColumn(3).setCellRenderer(new RenderBotones());
-    jTable1.getColumnModel().getColumn(3).setCellEditor(new EditorBotones(new JCheckBox(), jTable1));
-
-    // Ajustar ancho de columnas
-    jTable1.getColumnModel().getColumn(0).setPreferredWidth(100);
-    jTable1.getColumnModel().getColumn(1).setPreferredWidth(300);
-    jTable1.getColumnModel().getColumn(2).setPreferredWidth(250);
-    jTable1.getColumnModel().getColumn(3).setPreferredWidth(350);
-    
-    // Ajustar altura de filas
-    jTable1.setRowHeight(40);
-    
-    jTable1.setTableHeader(null);
-    jTable1.setFont(new java.awt.Font("Yu Gothic UI", java.awt.Font.PLAIN, 18));
-    jTable1.setGridColor(new java.awt.Color(180, 214, 197));
-    jTable1.setShowHorizontalLines(false);
-    jTable1.setShowVerticalLines(false);
-
-    // --- Cargar horarios predefinidos ---
-    cargarHorariosDelDia();
-
-    // --- centrado y visibilidad ---
-    this.setLocationRelativeTo(null);
-    this.setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-    this.setVisible(true);
-}
 
 // NUEVO MÉTODO - Cargar horarios del día
-private void cargarHorariosDelDia() {
+    private void cargarHorariosDelDia() {
     javax.swing.table.DefaultTableModel modelo =
         (javax.swing.table.DefaultTableModel) jTable1.getModel();
     modelo.setRowCount(0);
     
-    // Cargar desde TurnoManager
-    for (Turno turno : TurnoManager.getInstancia().getTurnos()) {
+    // Cargar turnos de la fecha actual desde TurnoManager
+    for (Turno0 turno : TurnoManager.getInstancia().getTurnosPorFecha(fechaActual)) {
         modelo.addRow(new Object[]{
             turno.getHora(),
             turno.getNombre(),
@@ -96,6 +95,20 @@ private void cargarHorariosDelDia() {
         });
     }
 }
+    
+    private void actualizarFechaYTurnos() {
+        // Actualizar título con la fecha
+        jLabel1.setText("Turnos del día - " + fechaActual.format(formatoFecha));
+    
+        // Actualizar el editor con la nueva fecha
+        jTable1.getColumnModel().getColumn(3).setCellEditor(
+            new EditorBotones(new JCheckBox(), jTable1, fechaActual)
+        );
+    
+        // Recargar turnos
+        cargarHorariosDelDia();
+    }
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -128,6 +141,11 @@ private void cargarHorariosDelDia() {
         jButton1.setBackground(new java.awt.Color(21, 70, 77));
         jButton1.setFont(new java.awt.Font("Yu Gothic UI Semibold", 1, 16)); // NOI18N
         jButton1.setText("Día anterior");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         jButton2.setBackground(new java.awt.Color(21, 70, 77));
         jButton2.setFont(new java.awt.Font("Yu Gothic UI Semibold", 0, 16)); // NOI18N
@@ -140,7 +158,9 @@ private void cargarHorariosDelDia() {
 
         jLabel1.setFont(new java.awt.Font("Century Gothic", 1, 36)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(21, 70, 77));
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("Turnos del día");
+        jLabel1.setPreferredSize(new java.awt.Dimension(800, 50));
 
         jSeparator1.setBackground(new java.awt.Color(21, 70, 77));
         jSeparator1.setForeground(new java.awt.Color(21, 70, 77));
@@ -185,11 +205,11 @@ private void cargarHorariosDelDia() {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(117, 117, 117)
                 .addComponent(jLabel2)
-                .addGap(201, 201, 201)
+                .addGap(215, 215, 215)
                 .addComponent(jLabel3)
-                .addGap(289, 289, 289)
+                .addGap(295, 295, 295)
                 .addComponent(jLabel4)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 331, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel5)
                 .addGap(273, 273, 273))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
@@ -199,9 +219,9 @@ private void cargarHorariosDelDia() {
                     .addComponent(jSeparator1)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(261, 261, 261)
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 290, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 303, Short.MAX_VALUE)
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 485, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(293, 293, 293)
                         .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(41, 41, 41))
         );
@@ -215,9 +235,9 @@ private void cargarHorariosDelDia() {
                             .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(41, 41, 41)
+                        .addGap(43, 43, 43)
                         .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(48, 48, 48)
+                .addGap(46, 46, 46)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
                     .addComponent(jLabel3)
@@ -263,10 +283,19 @@ private void cargarHorariosDelDia() {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt){
+        fechaActual = fechaActual.minusDays(1);
+        actualizarFechaYTurnos();  
+    }
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
+        fechaActual = fechaActual.plusDays(1);
+        actualizarFechaYTurnos();
     }//GEN-LAST:event_jButton2ActionPerformed
-
+/*
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton1ActionPerformed
+*/
     /**
      * @param args the command line arguments
      */
@@ -316,4 +345,7 @@ private void cargarHorariosDelDia() {
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JTable jTable1;
     // End of variables declaration//GEN-END:variables
+
+    private LocalDate fechaActual;
+    private final DateTimeFormatter formatoFecha = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 }
