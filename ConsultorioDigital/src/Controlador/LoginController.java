@@ -4,9 +4,10 @@ import Vista.VistaLogin;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JOptionPane;
-import Vista.VistaMenuPrincipal;
-import Controlador.MenuController;
+//import Vista.VistaMenuPrincipal;
+//import Controlador.MenuController;
 import Modelo.RepositorioUsuarios;
+import Vista.VistaListaDeTurnos;
 public class LoginController implements ActionListener {
 
     private VistaLogin vista; // La vista (interfaz gráfica)
@@ -17,7 +18,7 @@ public class LoginController implements ActionListener {
      */
     public LoginController(VistaLogin vista) {
         this.vista = vista;
-      //  this.modelo = modelo;
+      // this.modelo = modelo;
         // Inicializa la escucha de eventos de la vista
         iniciarControl();
     }
@@ -76,17 +77,19 @@ private void iniciarSesion() {
         // Credenciales correctas
         JOptionPane.showMessageDialog(vista, "¡Inicio de Sesión Exitoso!", "Bienvenido", JOptionPane.INFORMATION_MESSAGE);
 
-       // 1. Crear una instancia de la ventana del menú principal (LA VISTA)
-        VistaMenuPrincipal vistaMenu = new VistaMenuPrincipal(); 
+       /// 1. Crear una instancia de la ventana de la lista de turnos (LA VISTA)
+        VistaListaDeTurnos vistaLista = new VistaListaDeTurnos();
+        vistaLista.setLocationRelativeTo(null);
         
-        // 2. Crear el Controlador del Menú y CONECTARLO CON LA VISTA
-        MenuController menuController = new MenuController(vistaMenu);
+        // 2. Crear el Controlador de la Lista y CONECTARLO CON LA VISTA
+        // (Debes crear esta clase ListaDeTurnosController si no existe)
+       // ListaDeTurnosController listaController = new ListaDeTurnosController(vistaLista);
         
         // 3. Iniciar el Controlador (Muestra la vista y ACTIVA los listeners)
-        menuController.iniciar(); 
+       // listaController.iniciar(); // Asumiendo que tienes un método iniciar()
         
         // 4. Cerrar la ventana de login actual (DEBE SER LO ÚLTIMO)
-        vista.dispose();
+        vista.dispose();;
         
     } else {
         // Credenciales incorrectas

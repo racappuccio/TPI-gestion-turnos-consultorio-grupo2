@@ -191,9 +191,9 @@
                               </Group>
                               <EmptySpace min="49" pref="49" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="fecha" min="-2" pref="229" max="-2" attributes="0"/>
                                   <Component id="CampoTelefono" alignment="0" min="-2" pref="236" max="-2" attributes="0"/>
                                   <Component id="CampoObraSocial" min="-2" pref="236" max="-2" attributes="0"/>
-                                  <Component id="jDateChooser1" min="-2" pref="236" max="-2" attributes="0"/>
                               </Group>
                           </Group>
                           <Group type="102" attributes="0">
@@ -273,12 +273,17 @@
                               <Component id="CampoObraSocial" min="-2" pref="31" max="-2" attributes="0"/>
                           </Group>
                       </Group>
-                      <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="jLabel7" min="-2" max="-2" attributes="0"/>
-                          <Component id="jDateChooser1" min="-2" max="-2" attributes="0"/>
+                          <Group type="102" attributes="0">
+                              <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
+                              <Component id="jLabel7" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <Group type="102" alignment="0" attributes="0">
+                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                              <Component id="fecha" min="-2" max="-2" attributes="0"/>
+                          </Group>
                       </Group>
-                      <EmptySpace min="-2" pref="19" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="13" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="jLabel8" min="-2" max="-2" attributes="0"/>
                           <Component id="jLabel10" min="-2" max="-2" attributes="0"/>
@@ -494,21 +499,25 @@
                 <Property name="model" type="javax.swing.SpinnerModel" editor="org.netbeans.modules.form.editors2.SpinnerModelEditor">
                   <SpinnerModel type="list">
                     <ListItem value="8:00 am"/>
-                    <ListItem value="8:15 am"/>
                     <ListItem value="8:30 am"/>
-                    <ListItem value="8:45 am"/>
                     <ListItem value="9:00 am"/>
-                    <ListItem value="9:15 am"/>
                     <ListItem value="9:30 am"/>
-                    <ListItem value="9:45 am"/>
                     <ListItem value="10:00 am"/>
-                    <ListItem value="10:15 am"/>
                     <ListItem value="10:30 am"/>
-                    <ListItem value="10:45 am"/>
                     <ListItem value="11:00 am"/>
-                    <ListItem value="11:15 am"/>
                     <ListItem value="11:30 am"/>
-                    <ListItem value="11:45 am"/>
+                    <ListItem value="12:00 am"/>
+                    <ListItem value="12:30 am"/>
+                    <ListItem value="13:00 am"/>
+                    <ListItem value="13:30 am"/>
+                    <ListItem value="14:00 am"/>
+                    <ListItem value="14:30 am"/>
+                    <ListItem value="15:00 am"/>
+                    <ListItem value="15:30 am"/>
+                    <ListItem value="16:00 am"/>
+                    <ListItem value="16:30 am"/>
+                    <ListItem value="17:00 am"/>
+                    <ListItem value="17:30 am"/>
                   </SpinnerModel>
                 </Property>
               </Properties>
@@ -532,15 +541,10 @@
                 <EventHandler event="focusGained" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="textArea1FocusGained"/>
               </Events>
             </Component>
-            <Component class="com.toedter.calendar.JDateChooser" name="jDateChooser1">
+            <Component class="com.toedter.calendar.JDateChooser" name="fecha">
               <Properties>
                 <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="ff" green="ff" red="ff" type="rgb"/>
-                </Property>
-                <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
-                  <Border info="org.netbeans.modules.form.compat2.border.BevelBorderInfo">
-                    <BevelBorder/>
-                  </Border>
                 </Property>
               </Properties>
             </Component>
