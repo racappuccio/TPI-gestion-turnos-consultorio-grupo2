@@ -4,7 +4,7 @@ import Vista.JFrame_principal;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JOptionPane;
-import Vista.MenuPrincipal;
+import Vista.JFrame_turnos;
 import Modelo.RepositorioUsuarios;
 public class LoginController implements ActionListener {
 
@@ -77,11 +77,11 @@ private void iniciarSesion() {
 
         // 🚀 Lógica de Navegación (CORREGIDA) 🚀
         
-        // 1. Crear una instancia de la ventana del menú principal
-        MenuPrincipal menu = new MenuPrincipal(); // ⬅️ Nombre CORREGIDO
+        // 1. Crear una instancia de la ventana de la lista de turnos
+        JFrame_turnos listaTurnos = new JFrame_turnos();
         
         // 2. Hacer visible la nueva ventana
-        menu.setVisible(true);
+        listaTurnos.setVisible(true);
 
         // 3. Cerrar la ventana de login actual
         vista.dispose();
