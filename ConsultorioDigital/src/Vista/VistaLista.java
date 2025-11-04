@@ -105,39 +105,40 @@ public class VistaLista extends javax.swing.JFrame {
 
 // MÉTODO - Cargar horarios del día
     private void cargarHorariosDelDia() {
-    javax.swing.table.DefaultTableModel modelo
-            = (javax.swing.table.DefaultTableModel) jTable1.getModel();
-    modelo.setRowCount(0);
+        javax.swing.table.DefaultTableModel modelo
+                = (javax.swing.table.DefaultTableModel) jTable1.getModel();
+        modelo.setRowCount(0);
 
-    // Cargar turnos de la fecha actual desde TurnoManager
-    for (Turno0 turno : TurnoManager.getInstancia().getTurnosPorFecha(fechaActual)) {
+        // Cargar turnos de la fecha actual desde TurnoManager
+        for (Turno0 turno : TurnoManager.getInstancia().getTurnosPorFecha(fechaActual)) {
 
-        String disponibilidad;
-        String nombreMostrado; 
+            String disponibilidad;
+            String nombreMostrado;
 
-        // 1. Verificar si el turno está Ocupado usando el campo Nombre
-        // La condición de ocupado es: el nombre NO es nulo Y el nombre NO está vacío.
-        if (turno.getNombre() != null && !turno.getNombre().trim().isEmpty()) {
-            
-            // Turno Ocupado:
-            disponibilidad = "Ocupado"; // <- CORRECTO: Columna 2 muestra 'Ocupado'
-            nombreMostrado = turno.getNombre(); // <- Columna 1 muestra 'juan peres'
+            // 1. Verificar si el turno está Ocupado usando el campo Nombre
+            // La condición de ocupado es: el nombre NO es nulo Y el nombre NO está vacío.
+            if (turno.getNombre() != null && !turno.getNombre().trim().isEmpty()) {
 
-        } else {
-            // Turno Disponible:
-            disponibilidad = "Disponible";
-            nombreMostrado = ""; // <- Columna 1 queda vacía
-        }
+                // Turno Ocupado:
+                disponibilidad = "Ocupado"; // <- CORRECTO: Columna 2 muestra 'Ocupado'
+                nombreMostrado = turno.getNombre(); // <- Columna 1 muestra 'juan peres'
 
-        modelo.addRow(new Object[]{
-            turno.getHora(),        // Columna 0: Hora
-            nombreMostrado,         // Columna 1: Nombre (solo paciente o vacío)
-            disponibilidad,         // Columna 2: Disponibilidad (Ocupado / Disponible)
-            ""                      // Columna 3: Acciones
+            } else {
+                // Turno Disponible:
+                disponibilidad = "Disponible";
+                nombreMostrado = ""; // <- Columna 1 queda vacía
+            }
+
+            modelo.addRow(new Object[]{
+                turno.getHora(), // Columna 0: Hora
+                nombreMostrado, // Columna 1: Nombre (solo paciente o vacío)
+                disponibilidad, // Columna 2: Disponibilidad (Ocupado / Disponible)
+                "" // Columna 3: Acciones
             // El campo MOTIVO (turno.getMotivo()) NO SE UTILIZA AQUÍ.
-        });
+            });
+        }
+        modelo.fireTableDataChanged();
     }
-}
 
     private void actualizarFechaYTurnos() {
         // Actualizar título con la fecha
@@ -150,6 +151,8 @@ public class VistaLista extends javax.swing.JFrame {
 
         // Recargar turnos
         cargarHorariosDelDia();
+        jTable1.repaint();
+        jTable1.revalidate();
     }
 
     /**
@@ -220,14 +223,14 @@ public class VistaLista extends javax.swing.JFrame {
                 new String[]{
                     "Hora", "Nombre", "Disponibilidad", "Acciones" // NUEVA COLUMNA Y CABECERAS NATIVAS
                 }
-        ){
-    // Sobrescribir el método para controlar la edición
-    @Override
-    public boolean isCellEditable(int row, int column) {
-        // Permitir edición SOLO para la columna "Acciones" (índice 3)
-        return column == 3;
-    }
-});
+        ) {
+            // Sobrescribir el método para controlar la edición
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                // Permitir edición SOLO para la columna "Acciones" (índice 3)
+                return column == 3;
+            }
+        });
         jScrollPane1.setViewportView(jTable1);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
