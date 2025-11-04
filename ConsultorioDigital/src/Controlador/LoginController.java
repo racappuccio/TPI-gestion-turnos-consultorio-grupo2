@@ -1,16 +1,16 @@
 package Controlador;
 
-import Vista.JFrame_principal;
+import Vista.VistaLogin;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JOptionPane;
-import Vista.JFrame_turnos;
+import Vista.VistaLista;
 
 public class LoginController implements ActionListener {
 
-    private JFrame_principal vista; // La vista (interfaz gráfica)
+    private VistaLogin vista; // La vista (interfaz gráfica)
     
-    public LoginController(JFrame_principal vista) {
+    public LoginController(VistaLogin vista) {
         this.vista = vista;
         //  this.modelo = modelo;
         // Inicializa la escucha de eventos de la vista
@@ -64,7 +64,7 @@ public class LoginController implements ActionListener {
 
             // 🚀 Lógica de Navegación (CORREGIDA) 🚀
             // 1. Crear una instancia de la ventana de la lista de turnos
-            JFrame_turnos listaTurnos = new JFrame_turnos();
+            VistaLista listaTurnos = new VistaLista();
 
             // 2. Hacer visible la nueva ventana
             listaTurnos.setVisible(true);

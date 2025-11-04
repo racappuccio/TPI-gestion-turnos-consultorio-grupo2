@@ -1,5 +1,6 @@
 package Vista;
 
+import Controlador.LoginController;
 import Modelo.Turno0;
 import Modelo.TurnoManager;
 import java.awt.Color;
@@ -11,9 +12,9 @@ import javax.swing.table.DefaultTableCellRenderer;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
-public class JFrame_turnos extends javax.swing.JFrame {
+public class VistaLista extends javax.swing.JFrame {
 
-    public JFrame_turnos() {
+    public VistaLista() {
         initComponents();
 
         fechaActual = LocalDate.now();
@@ -150,6 +151,7 @@ public class JFrame_turnos extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
+        BotonCerrarSesion = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -269,13 +271,25 @@ public class JFrame_turnos extends javax.swing.JFrame {
                 .addContainerGap(35, Short.MAX_VALUE))
         );
 
+        BotonCerrarSesion.setBackground(new java.awt.Color(128, 185, 156));
+        BotonCerrarSesion.setFont(new java.awt.Font("Arial Black", 0, 18)); // NOI18N
+        BotonCerrarSesion.setForeground(new java.awt.Color(0, 51, 51));
+        BotonCerrarSesion.setText("Cerrar sesion");
+        BotonCerrarSesion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BotonCerrarSesionActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(112, 112, 112)
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(BotonCerrarSesion, javax.swing.GroupLayout.PREFERRED_SIZE, 193, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(112, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -283,7 +297,9 @@ public class JFrame_turnos extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(112, 112, 112)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(218, Short.MAX_VALUE))
+                .addGap(39, 39, 39)
+                .addComponent(BotonCerrarSesion, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(115, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -313,6 +329,24 @@ public class JFrame_turnos extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton1ActionPerformed
 */
+    private void BotonCerrarSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonCerrarSesionActionPerformed
+
+        int respuesta = javax.swing.JOptionPane.showConfirmDialog(
+                this, // El componente padre (generalmente la ventana actual)
+                "¿Estás seguro de que quieres cerrar la sesión?", // Mensaje de la advertencia
+                "Confirmar Cierre de Sesión", // Título de la ventana
+                javax.swing.JOptionPane.YES_NO_OPTION, // Botones (Sí/No)
+                javax.swing.JOptionPane.WARNING_MESSAGE // Tipo de icono (Advertencia)
+        );
+        if (respuesta == javax.swing.JOptionPane.YES_OPTION) {
+            this.dispose(); // Cierra la ventana actual
+            VistaLogin vistaLogin = new VistaLogin();
+            vistaLogin.setVisible(true);
+            LoginController loginController = new LoginController(vistaLogin);
+            vistaLogin.setVisible(true);
+        }
+    }//GEN-LAST:event_BotonCerrarSesionActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -330,25 +364,27 @@ public class JFrame_turnos extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(JFrame_turnos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(VistaLista.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(JFrame_turnos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(VistaLista.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(JFrame_turnos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(VistaLista.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(JFrame_turnos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(VistaLista.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new JFrame_turnos().setVisible(true);
+                new VistaLista().setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton BotonCerrarSesion;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;

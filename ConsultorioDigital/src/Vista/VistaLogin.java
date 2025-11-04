@@ -3,13 +3,13 @@ package Vista;
 import javax.swing.*;
 import javax.swing.BorderFactory;
 
-public class JFrame_principal extends javax.swing.JFrame {
+public class VistaLogin extends javax.swing.JFrame {
 
-    public JFrame_principal() {
+    public VistaLogin() {
         initComponents();
 
-        jTextField1.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 0));
-        jPasswordField1.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 0));
+        TextFieldUsuario.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 0));
+        PasswordFieldContraseña.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 0));
         //jTextField1.setBorder(new RoundedBorder(10));
         //jTextField2.setBorder(new RoundedBorder(10));
 
@@ -30,10 +30,10 @@ public class JFrame_principal extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        TextFieldUsuario = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
-        jPasswordField1 = new javax.swing.JPasswordField();
+        PasswordFieldContraseña = new javax.swing.JPasswordField();
 
         checkbox1.setLabel("checkbox1");
 
@@ -55,28 +55,28 @@ public class JFrame_principal extends javax.swing.JFrame {
         jLabel3.setForeground(new java.awt.Color(239, 239, 232));
         jLabel3.setText("Bienvenido");
 
-        jTextField1.setBackground(new java.awt.Color(239, 239, 232));
-        jTextField1.setFont(new java.awt.Font("Yu Gothic UI", 0, 20)); // NOI18N
-        jTextField1.setForeground(new java.awt.Color(166, 166, 166));
-        jTextField1.setHorizontalAlignment(javax.swing.JTextField.LEFT);
-        jTextField1.setText("Usuario");
-        jTextField1.setActionCommand("<Not Set>");
-        jTextField1.setBorder(null);
-        jTextField1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        jTextField1.setMargin(new java.awt.Insets(2, 10, 2, 2));
-        jTextField1.setOpaque(true);
-        jTextField1.setSelectedTextColor(new java.awt.Color(166, 166, 166));
-        jTextField1.addFocusListener(new java.awt.event.FocusAdapter() {
+        TextFieldUsuario.setBackground(new java.awt.Color(239, 239, 232));
+        TextFieldUsuario.setFont(new java.awt.Font("Yu Gothic UI", 0, 20)); // NOI18N
+        TextFieldUsuario.setForeground(new java.awt.Color(166, 166, 166));
+        TextFieldUsuario.setHorizontalAlignment(javax.swing.JTextField.LEFT);
+        TextFieldUsuario.setText("Usuario");
+        TextFieldUsuario.setActionCommand("<Not Set>");
+        TextFieldUsuario.setBorder(null);
+        TextFieldUsuario.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        TextFieldUsuario.setMargin(new java.awt.Insets(2, 10, 2, 2));
+        TextFieldUsuario.setOpaque(true);
+        TextFieldUsuario.setSelectedTextColor(new java.awt.Color(166, 166, 166));
+        TextFieldUsuario.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
-                jTextField1FocusGained(evt);
+                TextFieldUsuarioFocusGained(evt);
             }
             public void focusLost(java.awt.event.FocusEvent evt) {
-                jTextField1FocusLost(evt);
+                TextFieldUsuarioFocusLost(evt);
             }
         });
-        jTextField1.addActionListener(new java.awt.event.ActionListener() {
+        TextFieldUsuario.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField1ActionPerformed(evt);
+                TextFieldUsuarioActionPerformed(evt);
             }
         });
 
@@ -84,27 +84,37 @@ public class JFrame_principal extends javax.swing.JFrame {
         jButton1.setFont(new java.awt.Font("Yu Gothic UI", 0, 28)); // NOI18N
         jButton1.setForeground(new java.awt.Color(21, 70, 77));
         jButton1.setText("Iniciar Sesion");
+        jButton1.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                jButton1ItemStateChanged(evt);
+            }
+        });
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
             }
         });
-
-        jPasswordField1.setBackground(new java.awt.Color(239, 239, 232));
-        jPasswordField1.setFont(new java.awt.Font("Yu Gothic UI Light", 0, 20)); // NOI18N
-        jPasswordField1.setForeground(new java.awt.Color(166, 166, 166));
-        jPasswordField1.setText("Contraseña");
-        jPasswordField1.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
-                jPasswordField1FocusGained(evt);
-            }
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                jPasswordField1FocusLost(evt);
+        jButton1.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jButton1KeyPressed(evt);
             }
         });
-        jPasswordField1.addActionListener(new java.awt.event.ActionListener() {
+
+        PasswordFieldContraseña.setBackground(new java.awt.Color(239, 239, 232));
+        PasswordFieldContraseña.setFont(new java.awt.Font("Yu Gothic UI Light", 0, 20)); // NOI18N
+        PasswordFieldContraseña.setForeground(new java.awt.Color(166, 166, 166));
+        PasswordFieldContraseña.setText("Contraseña");
+        PasswordFieldContraseña.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                PasswordFieldContraseñaFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                PasswordFieldContraseñaFocusLost(evt);
+            }
+        });
+        PasswordFieldContraseña.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jPasswordField1ActionPerformed(evt);
+                PasswordFieldContraseñaActionPerformed(evt);
             }
         });
 
@@ -122,8 +132,8 @@ public class JFrame_principal extends javax.swing.JFrame {
                         .addGap(38, 38, 38))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(jPasswordField1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 381, Short.MAX_VALUE)
-                            .addComponent(jTextField1, javax.swing.GroupLayout.Alignment.LEADING))
+                            .addComponent(PasswordFieldContraseña, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 381, Short.MAX_VALUE)
+                            .addComponent(TextFieldUsuario, javax.swing.GroupLayout.Alignment.LEADING))
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -149,9 +159,9 @@ public class JFrame_principal extends javax.swing.JFrame {
                 .addGap(49, 49, 49)
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jTextField1, javax.swing.GroupLayout.DEFAULT_SIZE, 65, Short.MAX_VALUE)
+                .addComponent(TextFieldUsuario, javax.swing.GroupLayout.DEFAULT_SIZE, 65, Short.MAX_VALUE)
                 .addGap(18, 18, 18)
-                .addComponent(jPasswordField1, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(PasswordFieldContraseña, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 31, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel4)
@@ -173,50 +183,58 @@ public class JFrame_principal extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
+    private void TextFieldUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TextFieldUsuarioActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField1ActionPerformed
+    }//GEN-LAST:event_TextFieldUsuarioActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
        // ¡DEBE ESTAR VACÍO! El controlador manejará esto.
     // Si tuviera código aquí, tendría prioridad sobre el ActionListener del controlador.
     }//GEN-LAST:event_jButton1ActionPerformed
 
-    private void jPasswordField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jPasswordField1ActionPerformed
+    private void PasswordFieldContraseñaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PasswordFieldContraseñaActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jPasswordField1ActionPerformed
+    }//GEN-LAST:event_PasswordFieldContraseñaActionPerformed
 
-    private void jTextField1FocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextField1FocusGained
+    private void TextFieldUsuarioFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_TextFieldUsuarioFocusGained
         //cuando se hace click en el campo 
-        if (jTextField1.getText().equals("Usuario")){
-            jTextField1.setText("");
-            jTextField1.setForeground(new java.awt.Color(153, 153 ,153));
+        if (TextFieldUsuario.getText().equals("Usuario")){
+            TextFieldUsuario.setText("");
+            TextFieldUsuario.setForeground(new java.awt.Color(0,0,0));
         }
-    }//GEN-LAST:event_jTextField1FocusGained
+    }//GEN-LAST:event_TextFieldUsuarioFocusGained
 
-    private void jTextField1FocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextField1FocusLost
+    private void TextFieldUsuarioFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_TextFieldUsuarioFocusLost
         //cuando sale del campo
-        if (jTextField1.getText().trim().isEmpty()) {
-            jTextField1.setText("Usuario");
-            jTextField1.setForeground(new java.awt.Color(166,166,166));
+        if (TextFieldUsuario.getText().trim().isEmpty()) {
+            TextFieldUsuario.setText("Usuario");
+            TextFieldUsuario.setForeground(new java.awt.Color(153,153,153));
         }
-    }//GEN-LAST:event_jTextField1FocusLost
+    }//GEN-LAST:event_TextFieldUsuarioFocusLost
 
-    private void jPasswordField1FocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jPasswordField1FocusGained
-        if (String.valueOf(jPasswordField1.getPassword()).equals("Contraseña")) {
-            jPasswordField1.setText("");
-            jPasswordField1.setForeground(new java.awt.Color(153, 153 ,153));
-            jPasswordField1.setEchoChar('•');
+    private void PasswordFieldContraseñaFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_PasswordFieldContraseñaFocusGained
+        if (String.valueOf(PasswordFieldContraseña.getPassword()).equals("Contraseña")) {
+            PasswordFieldContraseña.setText("");
+            PasswordFieldContraseña.setForeground(new java.awt.Color(0,0,0));
+            PasswordFieldContraseña.setEchoChar('•');
         }
-    }//GEN-LAST:event_jPasswordField1FocusGained
+    }//GEN-LAST:event_PasswordFieldContraseñaFocusGained
 
-    private void jPasswordField1FocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jPasswordField1FocusLost
-        if (String.valueOf(jPasswordField1.getPassword()).trim().isEmpty()) {
-            jPasswordField1.setText("Contraseña");
-            jPasswordField1.setForeground(new java.awt.Color(166,166,166));
-            jPasswordField1.setEchoChar((char) 0);
+    private void PasswordFieldContraseñaFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_PasswordFieldContraseñaFocusLost
+        if (String.valueOf(PasswordFieldContraseña.getPassword()).trim().isEmpty()) {
+            PasswordFieldContraseña.setText("Contraseña");
+            PasswordFieldContraseña.setForeground(new java.awt.Color(153,153,153));
+            PasswordFieldContraseña.setEchoChar((char) 0);
         }
-    }//GEN-LAST:event_jPasswordField1FocusLost
+    }//GEN-LAST:event_PasswordFieldContraseñaFocusLost
+
+    private void jButton1ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jButton1ItemStateChanged
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton1ItemStateChanged
+
+    private void jButton1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jButton1KeyPressed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton1KeyPressed
 
     /**
      * @param args the command line arguments
@@ -235,14 +253,78 @@ public class JFrame_principal extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(JFrame_principal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(VistaLogin.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(JFrame_principal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(VistaLogin.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(JFrame_principal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(VistaLogin.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(JFrame_principal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(VistaLogin.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
         //</editor-fold>
@@ -311,12 +393,14 @@ public class JFrame_principal extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new JFrame_principal().setVisible(true);
+                new VistaLogin().setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JPasswordField PasswordFieldContraseña;
+    private javax.swing.JTextField TextFieldUsuario;
     private java.awt.Checkbox checkbox1;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
@@ -324,8 +408,6 @@ public class JFrame_principal extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPasswordField jPasswordField1;
-    private javax.swing.JTextField jTextField1;
     // End of variables declaration//GEN-END:variables
 // Dentro de la clase JFrame_principal
 // ...
@@ -336,11 +418,11 @@ public class JFrame_principal extends javax.swing.JFrame {
     }
 
     public javax.swing.JTextField getjTextField1() {
-        return jTextField1;
+        return TextFieldUsuario;
     }
 
     public javax.swing.JTextField jPasswordField1() {
-        return jPasswordField1;
+        return PasswordFieldContraseña;
     }
 
 // ...
