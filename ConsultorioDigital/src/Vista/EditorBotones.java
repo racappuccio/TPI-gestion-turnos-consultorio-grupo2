@@ -54,9 +54,9 @@ public class EditorBotones extends DefaultCellEditor {
         this.selectedRow = row;
         panel.removeAll();
  
-        String nombre = (String) table.getValueAt(row, 1);
+        String disponibilidad = (String) table.getValueAt(row, 2);
  
-        if (nombre == null || nombre.trim().isEmpty() || nombre.equalsIgnoreCase("Libre")) {
+        if (disponibilidad == null || disponibilidad.trim().isEmpty() || disponibilidad.equalsIgnoreCase("Disponible")) {
             panel.setBackground(new Color(220, 240, 220));
             panel.add(btnAgendar);
         } else {
@@ -127,7 +127,7 @@ public class EditorBotones extends DefaultCellEditor {
  
             TurnoManager.getInstancia().agregarTurno(fechaActual, hora, nombre, dni, telefono, obraSocial, motivo);
             table.setValueAt(nombre, row, 1);
-            table.setValueAt(motivo, row, 2);
+            table.setValueAt("Ocupado", row, 2);
             
             table.repaint();
  
@@ -179,7 +179,7 @@ public class EditorBotones extends DefaultCellEditor {
             turno.setMotivo(nuevoMotivo);
  
             table.setValueAt(nuevoNombre, row, 1);
-            table.setValueAt(nuevoMotivo, row, 2);
+            table.setValueAt("Ocupado", row, 2);
             
             table.repaint();
  
@@ -198,8 +198,9 @@ public class EditorBotones extends DefaultCellEditor {
                 JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
  
             TurnoManager.getInstancia().eliminarTurno(fechaActual, hora);
-            table.setValueAt("Libre", row, 1);
-            table.setValueAt("", row, 2);
+            table.setValueAt("Disponible", row, 1);
+            table.setValueAt("", row, 1);
+            table.setValueAt("Disponible", row, 2);
  
             table.repaint();
             

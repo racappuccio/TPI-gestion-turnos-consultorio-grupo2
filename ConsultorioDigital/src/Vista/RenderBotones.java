@@ -45,9 +45,9 @@ public class RenderBotones extends JPanel implements TableCellRenderer {
             boolean isSelected, boolean hasFocus, int row, int column) {
         
         removeAll();
-        String nombre = (String) table.getValueAt(row, 1);
+        String disponibilidad = (String) table.getValueAt(row, 2);
         
-        if (nombre == null || nombre.trim().isEmpty() || nombre.equalsIgnoreCase("Libre")) {
+        if (disponibilidad == null || disponibilidad.trim().isEmpty() || disponibilidad.equalsIgnoreCase("Disponible")) {
             setBackground(new Color(220, 240, 220));
             add(btnAgendar);
         } else {

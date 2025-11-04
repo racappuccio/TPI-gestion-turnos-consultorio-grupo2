@@ -38,7 +38,7 @@ public class TurnoManager {
         };
         
         for (String hora : horarios) {
-            turnos.add(new Turno0(hora, "Libre", "", "", "", ""));
+            turnos.add(new Turno0(hora, "", "", "", "", ""));
         }
         
         turnosPorFecha.put(fecha, turnos);
@@ -71,7 +71,7 @@ public class TurnoManager {
         
         for (Turno0 t : turnos) {
             if (t.getHora().equals(hora)) {
-                t.setNombre("Libre");
+                t.setNombre("");
                 t.setDni("");
                 t.setTelefono("");
                 t.setObraSocial("");
