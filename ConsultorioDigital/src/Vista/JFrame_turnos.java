@@ -10,13 +10,12 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import javax.swing.table.DefaultTableModel;
 
 public class JFrame_turnos extends javax.swing.JFrame {
 
     public JFrame_turnos() {
         initComponents();
-        
+
         fechaActual = LocalDate.now();
         jLabel1.setText("Turnos del día - " + fechaActual.format(formatoFecha));
         System.out.println("Turnos del dia - " + fechaActual.format(DateTimeFormatter.ofPattern("dd/MM")));
@@ -73,6 +72,27 @@ public class JFrame_turnos extends javax.swing.JFrame {
         // --- Cargar horarios predefinidos ---
         cargarHorariosDelDia();
 
+        // --- Detectar clics en columnas de "Nombre" o "Motivo" ---
+        jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                int row = jTable1.rowAtPoint(evt.getPoint());
+                int column = jTable1.columnAtPoint(evt.getPoint());
+
+                // Si clic en columnas 1 (nombre) o 2 (motivo)
+                if (column == 1 || column == 2) {
+                    String nombre = (String) jTable1.getValueAt(row, 1);
+                    EditorBotones editor = new EditorBotones(new JCheckBox(), jTable1, fechaActual);
+
+                    if (nombre == null || nombre.equalsIgnoreCase("Libre") || nombre.isEmpty()) {
+                        editor.agendarTurno(row);  // Si está libre → agendar
+                    } else {
+                        editor.modificarTurno(row); // Si tiene paciente → modificar
+                    }
+                }
+            }
+        });
+
         // --- centrado y visibilidad ---
         this.setLocationRelativeTo(null);
         this.setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -81,34 +101,33 @@ public class JFrame_turnos extends javax.swing.JFrame {
 
 // NUEVO MÉTODO - Cargar horarios del día
     private void cargarHorariosDelDia() {
-    javax.swing.table.DefaultTableModel modelo =
-        (javax.swing.table.DefaultTableModel) jTable1.getModel();
-    modelo.setRowCount(0);
-    
-    // Cargar turnos de la fecha actual desde TurnoManager
-    for (Turno0 turno : TurnoManager.getInstancia().getTurnosPorFecha(fechaActual)) {
-        modelo.addRow(new Object[]{
-            turno.getHora(),
-            turno.getNombre(),
-            turno.getMotivo(),
-            ""
-        });
+        javax.swing.table.DefaultTableModel modelo
+                = (javax.swing.table.DefaultTableModel) jTable1.getModel();
+        modelo.setRowCount(0);
+
+        // Cargar turnos de la fecha actual desde TurnoManager
+        for (Turno0 turno : TurnoManager.getInstancia().getTurnosPorFecha(fechaActual)) {
+            modelo.addRow(new Object[]{
+                turno.getHora(),
+                turno.getNombre(),
+                turno.getMotivo(),
+                ""
+            });
+        }
     }
-}
-    
+
     private void actualizarFechaYTurnos() {
         // Actualizar título con la fecha
         jLabel1.setText("Turnos del día - " + fechaActual.format(formatoFecha));
-    
+
         // Actualizar el editor con la nueva fecha
         jTable1.getColumnModel().getColumn(3).setCellEditor(
-            new EditorBotones(new JCheckBox(), jTable1, fechaActual)
+                new EditorBotones(new JCheckBox(), jTable1, fechaActual)
         );
-    
+
         // Recargar turnos
         cargarHorariosDelDia();
     }
-
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -247,7 +266,7 @@ public class JFrame_turnos extends javax.swing.JFrame {
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(93, Short.MAX_VALUE))
+                .addContainerGap(35, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -257,41 +276,39 @@ public class JFrame_turnos extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(112, 112, 112)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(89, Short.MAX_VALUE))
+                .addContainerGap(112, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(77, 77, 77)
+                .addGap(112, 112, 112)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(111, Short.MAX_VALUE))
+                .addContainerGap(218, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt){
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {
         fechaActual = fechaActual.minusDays(1);
-        actualizarFechaYTurnos();  
+        actualizarFechaYTurnos();
     }
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         fechaActual = fechaActual.plusDays(1);
         actualizarFechaYTurnos();
     }//GEN-LAST:event_jButton2ActionPerformed
-/*
+    /*
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton1ActionPerformed
