@@ -66,6 +66,14 @@ public class JFrame_principal extends javax.swing.JFrame {
         jTextField1.setMargin(new java.awt.Insets(2, 10, 2, 2));
         jTextField1.setOpaque(true);
         jTextField1.setSelectedTextColor(new java.awt.Color(166, 166, 166));
+        jTextField1.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                jTextField1FocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                jTextField1FocusLost(evt);
+            }
+        });
         jTextField1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jTextField1ActionPerformed(evt);
@@ -85,7 +93,15 @@ public class JFrame_principal extends javax.swing.JFrame {
         jPasswordField1.setBackground(new java.awt.Color(239, 239, 232));
         jPasswordField1.setFont(new java.awt.Font("Yu Gothic UI Light", 0, 20)); // NOI18N
         jPasswordField1.setForeground(new java.awt.Color(166, 166, 166));
-        jPasswordField1.setText("jPasswordField1");
+        jPasswordField1.setText("Contraseña");
+        jPasswordField1.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                jPasswordField1FocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                jPasswordField1FocusLost(evt);
+            }
+        });
         jPasswordField1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jPasswordField1ActionPerformed(evt);
@@ -169,6 +185,38 @@ public class JFrame_principal extends javax.swing.JFrame {
     private void jPasswordField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jPasswordField1ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jPasswordField1ActionPerformed
+
+    private void jTextField1FocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextField1FocusGained
+        //cuando se hace click en el campo 
+        if (jTextField1.getText().equals("Usuario")){
+            jTextField1.setText("");
+            jTextField1.setForeground(new java.awt.Color(153, 153 ,153));
+        }
+    }//GEN-LAST:event_jTextField1FocusGained
+
+    private void jTextField1FocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextField1FocusLost
+        //cuando sale del campo
+        if (jTextField1.getText().trim().isEmpty()) {
+            jTextField1.setText("Usuario");
+            jTextField1.setForeground(new java.awt.Color(166,166,166));
+        }
+    }//GEN-LAST:event_jTextField1FocusLost
+
+    private void jPasswordField1FocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jPasswordField1FocusGained
+        if (String.valueOf(jPasswordField1.getPassword()).equals("Contraseña")) {
+            jPasswordField1.setText("");
+            jPasswordField1.setForeground(new java.awt.Color(153, 153 ,153));
+            jPasswordField1.setEchoChar('•');
+        }
+    }//GEN-LAST:event_jPasswordField1FocusGained
+
+    private void jPasswordField1FocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jPasswordField1FocusLost
+        if (String.valueOf(jPasswordField1.getPassword()).trim().isEmpty()) {
+            jPasswordField1.setText("Contraseña");
+            jPasswordField1.setForeground(new java.awt.Color(166,166,166));
+            jPasswordField1.setEchoChar((char) 0);
+        }
+    }//GEN-LAST:event_jPasswordField1FocusLost
 
     /**
      * @param args the command line arguments
