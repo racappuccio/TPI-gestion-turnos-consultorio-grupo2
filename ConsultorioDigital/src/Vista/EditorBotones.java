@@ -75,65 +75,109 @@ public class EditorBotones extends DefaultCellEditor {
     public Object getCellEditorValue() { return ""; }
  
     // ========================= VALIDACIÓN REUTILIZABLE =========================
-    private boolean validarCampos(String nombre, String dni, String telefono, String motivo) {
-        if (nombre.isEmpty() || !nombre.matches("[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+")) {
-            JOptionPane.showMessageDialog(panel, "Ingrese un nombre válido (solo letras).");
-            return false;
+   private boolean validarCampos(String nombre, String dni, String telefono, String motivo) {
+        
+        // Usamos StringBuilder para acumular todos los errores encontrados
+        StringBuilder errores = new StringBuilder();
+        
+        // 1. Validar Nombre
+        if (nombre.isEmpty()) {
+            errores.append("- Nombre y apellido es obligatorio.\n");
+        } else if (!nombre.matches("[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+")) {
+            errores.append("- Ingrese un nombre válido (solo letras).\n");
         }
-        if (!dni.matches("\\d{7,8}")) {
-            JOptionPane.showMessageDialog(panel, "Ingrese un DNI válido (7 u 8 dígitos numéricos).");
-            return false;
+        
+        // 2. Validar DNI
+        if (dni.isEmpty()) {
+            errores.append("- DNI es obligatorio.\n");
+        } else if (!dni.matches("\\d{7,8}")) {
+            errores.append("- Ingrese un DNI válido (7 u 8 dígitos numéricos).\n");
         }
-        if (!telefono.matches("\\d{6,15}")) {
-            JOptionPane.showMessageDialog(panel, "Ingrese un teléfono válido (solo números, 6-15 dígitos).");
-            return false;
+        
+        // 3. Validar Teléfono
+        if (telefono.isEmpty()) {
+            errores.append("- Teléfono es obligatorio.\n");
+        } else if (!telefono.matches("\\d{6,15}")) {
+            // El mensaje de error que se veía en la imagen (solo números, 6-15 dígitos)
+            errores.append("- Ingrese un teléfono válido (solo números, 6-15 dígitos).\n"); 
         }
+        
+        // 4. Validar Motivo
         if (motivo.isEmpty()) {
-            JOptionPane.showMessageDialog(panel, "Debe ingresar el motivo de consulta.");
-            return false;
+            errores.append("- Motivo de consulta es obligatorio.\n");
         }
-        return true;
+
+        // 5. Verificar si hay errores acumulados
+        if (errores.length() > 0) {
+            // Si hay errores, mostrar un mensaje resumen con todos ellos
+            JOptionPane.showMessageDialog(panel, 
+                    "Por favor, complete los siguientes datos:\n\n" + errores.toString(), 
+                    "DATOS OBLIGATORIOS", 
+                    JOptionPane.ERROR_MESSAGE); 
+            return false; // Indica que la validación falló
+        }
+        
+        return true; // La validación fue exitosa
     }
  
     // ========================= AGENDAR TURNO =========================
-    public void agendarTurno(int row) {
-        String hora = (String) table.getValueAt(row, 0);
- 
-        JTextField txtNombre = new JTextField();
-        JTextField txtDni = new JTextField();
-        JTextField txtTelefono = new JTextField();
-        JTextField txtObraSocial = new JTextField();
-        JTextField txtMotivo = new JTextField();
- 
-        Object[] mensaje = {
-                "Horario:", hora,
-                "Nombre y apellido del paciente:", txtNombre,
-                "DNI del paciente:", txtDni,
-                "Teléfono del paciente:", txtTelefono,
-                "Obra social:", txtObraSocial,
-                "Motivo de consulta:", txtMotivo
-        };
- 
-        if (JOptionPane.showConfirmDialog(panel, mensaje, "Agendar Turno",
-                JOptionPane.OK_CANCEL_OPTION) == JOptionPane.OK_OPTION) {
- 
+   // ========================= AGENDAR TURNO MODIFICADO =========================
+public void agendarTurno(int row) {
+    String hora = (String) table.getValueAt(row, 0);
+    boolean validacionExitosa = false;
+
+    // Declaramos los campos de texto aquí, fuera del bucle, para que conserven su valor
+    JTextField txtNombre = new JTextField();
+    JTextField txtDni = new JTextField();
+    JTextField txtTelefono = new JTextField();
+    JTextField txtObraSocial = new JTextField();
+    JTextField txtMotivo = new JTextField();
+
+    // El mensaje y los campos (objetos) se definen una sola vez
+    Object[] mensaje = {
+        "Horario:", hora,
+        "Nombre y apellido del paciente:", txtNombre,
+        "DNI del paciente:", txtDni,
+        "Teléfono del paciente:", txtTelefono,
+        "Obra social:", txtObraSocial,
+        "Motivo de consulta:", txtMotivo
+    };
+
+    // Bucle para reabrir el formulario hasta que se valide o se cancele
+    do {
+        // Mostramos el diálogo. Los JTextFields conservan su contenido.
+        int opcion = JOptionPane.showConfirmDialog(panel, mensaje, "Agendar Turno",
+                                                  JOptionPane.OK_CANCEL_OPTION);
+
+        if (opcion == JOptionPane.OK_OPTION) {
+            // El usuario presionó OK. Extraemos y limpiamos los valores.
             String nombre = txtNombre.getText().trim();
             String dni = txtDni.getText().trim();
             String telefono = txtTelefono.getText().trim();
             String obraSocial = txtObraSocial.getText().trim();
             String motivo = txtMotivo.getText().trim();
- 
-            if (!validarCampos(nombre, dni, telefono, motivo)) return;
- 
-            TurnoManager.getInstancia().agregarTurno(fechaActual, hora, nombre, dni, telefono, obraSocial, motivo);
-            table.setValueAt(nombre, row, 1);
-            table.setValueAt("Ocupado", row, 2);
-            
-            table.repaint();
- 
-            JOptionPane.showMessageDialog(panel, "Turno agendado exitosamente");
+
+            // 1. Intentamos validar.
+            if (validarCampos(nombre, dni, telefono, motivo)) {
+                // 2. Si la validación es exitosa:
+                TurnoManager.getInstancia().agregarTurno(fechaActual, hora, nombre, dni, telefono, obraSocial, motivo);
+                table.setValueAt(nombre, row, 1);
+                table.setValueAt("Ocupado", row, 2);
+                table.repaint();
+                JOptionPane.showMessageDialog(panel, "Turno agendado exitosamente");
+                validacionExitosa = true; // Salimos del bucle
+            } 
+            // 3. Si la validación falla (validador muestra el error y retorna false), 
+            // la bandera 'validacionExitosa' sigue siendo false y el bucle se repite, 
+            // mostrando de nuevo el formulario con los datos ya cargados.
+
+        } else {
+            // El usuario hizo clic en Cancelar o cerró el diálogo. Salimos del bucle.
+            validacionExitosa = true; 
         }
-    }
+
+    } while (!validacionExitosa);
+}
  
     // ========================= MODIFICAR TURNO =========================
     public void modificarTurno(int row) {
