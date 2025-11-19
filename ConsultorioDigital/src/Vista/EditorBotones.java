@@ -142,6 +142,13 @@ public class EditorBotones extends DefaultCellEditor {
     // ========================= AGENDAR TURNO =========================
     // ========================= AGENDAR TURNO MODIFICADO =========================
     public void agendarTurno(int row) {
+        if (fechaActual.isBefore(LocalDate.now())) {
+            JOptionPane.showMessageDialog(panel,
+                    "No es posible agendar un turno en un día que ya haya transcurrido",
+                    "Fecha inválida",
+                    JOptionPane.WARNING_MESSAGE);
+            return;
+        }
         String hora = (String) table.getValueAt(row, 0);
         boolean validacionExitosa = false;
 
@@ -150,7 +157,6 @@ public class EditorBotones extends DefaultCellEditor {
         JTextField txtDni = new JTextField();
         JTextField txtTelefono = new JTextField();
         JTextField txtObraSocial = new JTextField();
-        JTextField txtMotivo = new JTextField();
         JTextArea areaMotivo = new JTextArea(4, 30); // 4 filas, 30 columnas
         areaMotivo.setLineWrap(true);      // Habilita el salto de línea visual
     areaMotivo.setWrapStyleWord(true); // Asegura que el salto sea por palabra
@@ -206,6 +212,13 @@ areaMotivo.getInputMap().put(KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_E
 
     // ========================= MODIFICAR TURNO =========================
     public void modificarTurno(int row) {
+        if (fechaActual.isBefore(LocalDate.now())) {
+            JOptionPane.showMessageDialog(panel,
+                    "No es posible modificar turnos de un día que ya haya transcurrido",
+                    "Fecha inválida",
+                    JOptionPane.WARNING_MESSAGE);
+            return;
+        }
         String hora = (String) table.getValueAt(row, 0);
         Turno0 turno = TurnoManager.getInstancia().getTurnoPorFechaYHora(fechaActual, hora);
 
@@ -263,6 +276,13 @@ JTextArea areaMotivo = new JTextArea(turno.getMotivo(), 4, 30); // Inicializar c
 
     // ========================= ELIMINAR Y DETALLES =========================
     private void eliminarTurno(int row) {
+        if (fechaActual.isBefore(LocalDate.now())) {
+            JOptionPane.showMessageDialog(panel,
+                    "No es posible eliminar turnos de un día que ya haya transcurrido",
+                    "Fecha inválida",
+                    JOptionPane.WARNING_MESSAGE);
+            return;
+        }
         String nombre = (String) table.getValueAt(row, 1);
         String hora = (String) table.getValueAt(row, 0);
 

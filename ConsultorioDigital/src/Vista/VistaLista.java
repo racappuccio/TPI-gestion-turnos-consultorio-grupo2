@@ -11,6 +11,7 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 import java.time.format.DateTimeFormatter;
 import java.time.LocalDate;
+import javax.swing.JOptionPane;
 
 public class VistaLista extends javax.swing.JFrame {
 
@@ -85,6 +86,13 @@ public class VistaLista extends javax.swing.JFrame {
 
                 // Si clic en columna 2 (disponibilidad)
                 if (column == 2) {
+                    if (fechaActual.isBefore(LocalDate.now())) {
+                        JOptionPane.showMessageDialog(null,
+                                "No es posible gestionar turnos de un día que ya haya transcurrido",
+                                "Fecha inválida",
+                                JOptionPane.WARNING_MESSAGE);
+                        return;
+                    }
                     String disponibilidad = (String) jTable1.getValueAt(row, 2);
                     EditorBotones editor = new EditorBotones(new JCheckBox(), jTable1, fechaActual);
 
