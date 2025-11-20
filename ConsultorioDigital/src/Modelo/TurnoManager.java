@@ -44,28 +44,40 @@ public class TurnoManager {
         turnosPorFecha.put(fecha, turnos);
     }
 
-    // Agregar turno en una fecha específica
+    /**
+     * Agrega o sobrescribe un turno en una fecha y hora específica.
+     * Si la hora no existe, se añade (lo que solo ocurriría si se añade una hora manual).
+     */
     public void agregarTurno(LocalDate fecha, String hora, String nombre, String dni, 
                             String telefono, String obraSocial, String motivo) {
         List<Turno0> turnos = getTurnosPorFecha(fecha);
-        
+        Turno0 turnoExistente = null; // Variable auxiliar
+
+        // Buscar el turno existente por hora
         for (Turno0 t : turnos) {
             if (t.getHora().equals(hora)) {
-                t.setNombre(nombre);
-                t.setDni(dni);
-                t.setTelefono(telefono);
-                t.setObraSocial(obraSocial);
-                t.setMotivo(motivo);
-                return;
+                turnoExistente = t;
+                break;
             }
         }
         
-        // Si no existe, agregar y ordenar
-        turnos.add(new Turno0(hora, nombre, dni, telefono, obraSocial, motivo));
-        turnos.sort((t1, t2) -> t1.getHora().compareTo(t2.getHora()));
+        if (turnoExistente != null) {
+            // Caso 1: Sobrescribir el turno existente
+            turnoExistente.setNombre(nombre);
+            turnoExistente.setDni(dni);
+            turnoExistente.setTelefono(telefono);
+            turnoExistente.setObraSocial(obraSocial);
+            turnoExistente.setMotivo(motivo);
+        } else {
+            // Caso 2: Si la hora no existe, agregar y ordenar (para horas fuera de la lista predefinida)
+            turnos.add(new Turno0(hora, nombre, dni, telefono, obraSocial, motivo));
+            turnos.sort((t1, t2) -> t1.getHora().compareTo(t2.getHora()));
+        }
     }
 
-    // Eliminar turno en una fecha específica
+    /**
+     * Elimina el turno en una fecha y hora específica, limpiando sus campos.
+     */
     public void eliminarTurno(LocalDate fecha, String hora) {
         List<Turno0> turnos = getTurnosPorFecha(fecha);
         
@@ -93,33 +105,28 @@ public class TurnoManager {
         return null;
     }
     
-    // Verifica si existe algún turno registrado con el DNI proporcionado
-    public boolean existeTurnoConDni(String dni) {
-        // Itera sobre todas las listas de turnos (una por cada fecha registrada)
+    /**
+     * Busca un turno registrado (no vacío) con el DNI proporcionado en cualquier fecha.
+     */
+    public Turno0 buscarTurnoPorDni(String dni) {
+        // Itera sobre todas las listas de turnos 
         for (List<Turno0> listaTurnos : turnosPorFecha.values()) {
             
             // Itera sobre cada turno dentro de la lista
             for (Turno0 turno : listaTurnos) {
                 
-                // Compara el DNI (asegurando que el DNI no esté vacío)
+                // Compara el DNI 
                 if (dni != null && !dni.isEmpty() && dni.equals(turno.getDni())) {
-                    return true; // Encontrado!
+                    return turno; 
                 }
             }
         }
-        return false; // No se encontró en ninguna fecha
+        return null; 
     }
 
-    // *******************************************************************
-    // *** NUEVO MÉTODO PARA OBTENER HORAS DISPONIBLES PARA MODIFICACIÓN ***
-    // *******************************************************************
-    
     /**
      * Obtiene una lista de todas las horas que no están reservadas en una fecha dada,
      * más la hora actual del turno que se está modificando.
-     * * @param fecha La fecha a buscar.
-     * @param horaActual La hora del turno que se va a modificar (debe ser incluida).
-     * @return List<String> de horarios disponibles y la hora actual.
      */
     public List<String> getHorasDisponibles(LocalDate fecha, String horaActual) {
         List<Turno0> todosLosTurnos = getTurnosPorFecha(fecha);
@@ -128,7 +135,7 @@ public class TurnoManager {
         for (Turno0 turno : todosLosTurnos) {
             // Un horario es "disponible" si:
             // 1. Está vacío (el DNI es vacío)
-            // 2. O es la hora del turno que estamos modificando (para que el usuario pueda seleccionarla)
+            // 2. O es la hora del turno que estamos modificando (horaActual)
             
             if (turno.getDni().isEmpty() || turno.getHora().equals(horaActual)) {
                 horasLibres.add(turno.getHora());

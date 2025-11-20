@@ -195,26 +195,37 @@ public class EditorBotones extends DefaultCellEditor {
                 // 1. Intentamos validar.
                 if (validarCampos(nombre, dni, telefono, motivo)) {
 
-                    if (TurnoManager.getInstancia().existeTurnoConDni(dni)) {
+                    Turno0 turnoExistente = TurnoManager.getInstancia().buscarTurnoPorDni(dni);
+
+                    if (turnoExistente != null) {
+                        
+                        // Construir el mensaje de advertencia con los datos del paciente
+                        String mensajeAdvertencia = String.format(
+                            "El paciente %s con DNI %s ya tiene un turno registrado.\n¿Desea continuar?", 
+                            turnoExistente.getNombre(), 
+                            turnoExistente.getDni() 
+                        );
+
                         int confirmacion = JOptionPane.showConfirmDialog(panel,
-                                "Este paciente ya tiene un turno registrado. ¿Desea continuar?",
-                                "Advertencia de DNI Duplicado",
-                                JOptionPane.YES_NO_OPTION,
-                                JOptionPane.WARNING_MESSAGE);
+                            mensajeAdvertencia, // Usamos el mensaje dinámico
+                            "Advertencia de DNI Duplicado",
+                            JOptionPane.YES_NO_OPTION,
+                            JOptionPane.WARNING_MESSAGE);
 
                         if (confirmacion == JOptionPane.NO_OPTION) {
                             // Si el usuario selecciona NO, volvemos al formulario.
-                            continue; 
+                            continue; // La validación falla, vuelve al inicio del do-while
                         }
                     }
-                    // 2. Si la validación es exitosa y la advertencia fue aceptada:
+                    
+                    // *** CORRECCIÓN CLAVE: GUARDAR Y RECARGAR AQUÍ ***
                     TurnoManager.getInstancia().agregarTurno(fechaActual, hora, nombre, dni, telefono, obraSocial, motivo);
-                   
-                    table.setValueAt("Ocupado", row, 2);
-                    table.repaint();
-                    this.vistaLista.actualizarFechaYTurnos();
+                    
+                    this.vistaLista.actualizarFechaYTurnos(); 
+                    
                     JOptionPane.showMessageDialog(panel, "Turno agendado exitosamente");
                     validacionExitosa = true; // Salimos del bucle
+                    // *** FIN CORRECCIÓN CLAVE ***
                 }
                 // Si la validación falla o el DNI es duplicado y el usuario selecciona NO, el bucle se repite.
 
@@ -224,8 +235,8 @@ public class EditorBotones extends DefaultCellEditor {
             }
 
         } while (!validacionExitosa);
+        
     }
-
     // ========================= MODIFICAR TURNO (CON HORA EN DESPLEGABLE) =========================
     public void modificarTurno(int row) {
         if (fechaActual.isBefore(LocalDate.now())) {
@@ -297,12 +308,23 @@ public class EditorBotones extends DefaultCellEditor {
             
             // Lógica de Advertencia de DNI Duplicado
             if (!nuevoDni.equals(dniOriginal)) {
-                if (TurnoManager.getInstancia().existeTurnoConDni(nuevoDni)) {
+                
+                Turno0 turnoExistente = TurnoManager.getInstancia().buscarTurnoPorDni(nuevoDni); // Búsqueda
+
+                if (turnoExistente != null) {
+                    
+                    // Construir el mensaje de advertencia con los datos del paciente
+                    String mensajeAdvertencia = String.format(
+                        "El nuevo DNI %s pertenece a %s, quien ya tiene un turno registrado.\n¿Desea continuar con esta modificación?", 
+                        turnoExistente.getDni(),
+                        turnoExistente.getNombre()
+                    );
+
                     int confirmacion = JOptionPane.showConfirmDialog(panel,
-                            "El nuevo DNI (" + nuevoDni + ") ya tiene un turno registrado. ¿Desea continuar?",
-                            "Advertencia de TURNO Duplicado",
-                            JOptionPane.YES_NO_OPTION,
-                            JOptionPane.WARNING_MESSAGE);
+                        mensajeAdvertencia, // Usamos el mensaje dinámico
+                        "Advertencia de DNI Duplicado",
+                        JOptionPane.YES_NO_OPTION,
+                        JOptionPane.WARNING_MESSAGE);
 
                     if (confirmacion == JOptionPane.NO_OPTION) {
                         return; // Aborta la modificación si el usuario selecciona NO
@@ -327,8 +349,7 @@ public class EditorBotones extends DefaultCellEditor {
                 turno.setMotivo(nuevoMotivo);
             }
 
-            table.repaint();
-         this.vistaLista.actualizarFechaYTurnos();
+            this.vistaLista.actualizarFechaYTurnos();
             JOptionPane.showMessageDialog(panel, "Turno modificado exitosamente");
         }
     }
@@ -351,12 +372,10 @@ public class EditorBotones extends DefaultCellEditor {
                 JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
 
             TurnoManager.getInstancia().eliminarTurno(fechaActual, hora);
-            table.setValueAt("Disponible", row, 1);
-            table.setValueAt("", row, 1);
-            table.setValueAt("Disponible", row, 2);
-
-            table.repaint();
-this.vistaLista.actualizarFechaYTurnos();
+            
+            // *** LLAMADA A RECARGA DE VISTA ***
+            this.vistaLista.actualizarFechaYTurnos();
+            
             JOptionPane.showMessageDialog(panel, "Turno cancelado");
         }
     }
