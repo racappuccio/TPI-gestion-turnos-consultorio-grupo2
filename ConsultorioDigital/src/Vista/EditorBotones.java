@@ -10,6 +10,7 @@ import javax.swing.text.AbstractDocument;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DocumentFilter;
+import java.util.List; // Necesario para List
 
 public class EditorBotones extends DefaultCellEditor {
 
@@ -21,11 +22,13 @@ public class EditorBotones extends DefaultCellEditor {
     private JTable table;
     private int selectedRow;
     private LocalDate fechaActual;
+    private VistaLista vistaLista;
 
-    public EditorBotones(JCheckBox checkBox, JTable table, LocalDate fecha) {
+    public EditorBotones(JCheckBox checkBox, JTable table, LocalDate fecha, VistaLista vistaLista) {
         super(checkBox);
         this.table = table;
         this.fechaActual = fecha;
+        this.vistaLista = vistaLista;
 
         panel = new JPanel(new FlowLayout(FlowLayout.CENTER, 5, 2));
         panel.setBackground(new Color(239, 239, 232));
@@ -140,7 +143,7 @@ public class EditorBotones extends DefaultCellEditor {
     }
 
     // ========================= AGENDAR TURNO =========================
-    // ========================= AGENDAR TURNO MODIFICADO =========================
+
     public void agendarTurno(int row) {
         if (fechaActual.isBefore(LocalDate.now())) {
             JOptionPane.showMessageDialog(panel,
@@ -159,9 +162,9 @@ public class EditorBotones extends DefaultCellEditor {
         JTextField txtObraSocial = new JTextField();
         JTextArea areaMotivo = new JTextArea(4, 30); // 4 filas, 30 columnas
         areaMotivo.setLineWrap(true);      // Habilita el salto de línea visual
-    areaMotivo.setWrapStyleWord(true); // Asegura que el salto sea por palabra
+        areaMotivo.setWrapStyleWord(true); // Asegura que el salto sea por palabra
         ((AbstractDocument) areaMotivo.getDocument()).setDocumentFilter(new LimitDocumentFilter(250));
-areaMotivo.getInputMap().put(KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_ENTER, 0), "none");
+        areaMotivo.getInputMap().put(KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_ENTER, 0), "none");
         
         JScrollPane scrollMotivo = new JScrollPane(areaMotivo);
         
@@ -188,19 +191,32 @@ areaMotivo.getInputMap().put(KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_E
                 String telefono = txtTelefono.getText().trim();
                 String obraSocial = txtObraSocial.getText().trim();
                 String motivo = areaMotivo.getText().trim();
+                
                 // 1. Intentamos validar.
                 if (validarCampos(nombre, dni, telefono, motivo)) {
-                    // 2. Si la validación es exitosa:
+
+                    if (TurnoManager.getInstancia().existeTurnoConDni(dni)) {
+                        int confirmacion = JOptionPane.showConfirmDialog(panel,
+                                "Este paciente ya tiene un turno registrado. ¿Desea continuar?",
+                                "Advertencia de DNI Duplicado",
+                                JOptionPane.YES_NO_OPTION,
+                                JOptionPane.WARNING_MESSAGE);
+
+                        if (confirmacion == JOptionPane.NO_OPTION) {
+                            // Si el usuario selecciona NO, volvemos al formulario.
+                            continue; 
+                        }
+                    }
+                    // 2. Si la validación es exitosa y la advertencia fue aceptada:
                     TurnoManager.getInstancia().agregarTurno(fechaActual, hora, nombre, dni, telefono, obraSocial, motivo);
-                    table.setValueAt(nombre, row, 1);
+                   
                     table.setValueAt("Ocupado", row, 2);
                     table.repaint();
+                    this.vistaLista.actualizarFechaYTurnos();
                     JOptionPane.showMessageDialog(panel, "Turno agendado exitosamente");
                     validacionExitosa = true; // Salimos del bucle
                 }
-                // 3. Si la validación falla (validador muestra el error y retorna false), 
-                // la bandera 'validacionExitosa' sigue siendo false y el bucle se repite, 
-                // mostrando de nuevo el formulario con los datos ya cargados.
+                // Si la validación falla o el DNI es duplicado y el usuario selecciona NO, el bucle se repite.
 
             } else {
                 // El usuario hizo clic en Cancelar o cerró el diálogo. Salimos del bucle.
@@ -210,7 +226,7 @@ areaMotivo.getInputMap().put(KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_E
         } while (!validacionExitosa);
     }
 
-    // ========================= MODIFICAR TURNO =========================
+    // ========================= MODIFICAR TURNO (CON HORA EN DESPLEGABLE) =========================
     public void modificarTurno(int row) {
         if (fechaActual.isBefore(LocalDate.now())) {
             JOptionPane.showMessageDialog(panel,
@@ -219,57 +235,100 @@ areaMotivo.getInputMap().put(KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_E
                     JOptionPane.WARNING_MESSAGE);
             return;
         }
-        String hora = (String) table.getValueAt(row, 0);
-        Turno0 turno = TurnoManager.getInstancia().getTurnoPorFechaYHora(fechaActual, hora);
+        
+        // *** CORRECCIÓN 1: Declarar horaOriginal ***
+        String horaOriginal = (String) table.getValueAt(row, 0); 
+        // *******************************************
+        
+        Turno0 turno = TurnoManager.getInstancia().getTurnoPorFechaYHora(fechaActual, horaOriginal);
 
         if (turno == null) {
             JOptionPane.showMessageDialog(panel, "No se encontró el turno seleccionado.");
             return;
         }
+        
+        String dniOriginal = turno.getDni();
 
+        // 1. Obtener la lista de horas disponibles
+        List<String> horasDisponibles = TurnoManager.getInstancia()
+                .getHorasDisponibles(fechaActual, horaOriginal); 
+
+        // 2. Crear el JComboBox con las horas disponibles
+        JComboBox<String> comboHora = new JComboBox<>(horasDisponibles.toArray(new String[0]));
+
+        // 3. Seleccionar la hora actual
+        comboHora.setSelectedItem(horaOriginal);
+        
         JTextField txtNombre = new JTextField(turno.getNombre());
         JTextField txtDni = new JTextField(turno.getDni());
         JTextField txtTelefono = new JTextField(turno.getTelefono());
         JTextField txtObraSocial = new JTextField(turno.getObraSocial());
-JTextArea areaMotivo = new JTextArea(turno.getMotivo(), 4, 30); // Inicializar con el motivo
-    areaMotivo.setLineWrap(true);
-    ((AbstractDocument) areaMotivo.getDocument()).setDocumentFilter(new LimitDocumentFilter(250));
-   areaMotivo.getInputMap().put(KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_ENTER, 0), "none");
-    areaMotivo.setWrapStyleWord(true);JScrollPane scrollMotivo = new JScrollPane(areaMotivo);
+        
+        JTextArea areaMotivo = new JTextArea(turno.getMotivo(), 4, 30); 
+        areaMotivo.setLineWrap(true);
+        ((AbstractDocument) areaMotivo.getDocument()).setDocumentFilter(new LimitDocumentFilter(250));
+        areaMotivo.getInputMap().put(KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_ENTER, 0), "none");
+        areaMotivo.setWrapStyleWord(true);
+        JScrollPane scrollMotivo = new JScrollPane(areaMotivo);
 
         Object[] mensaje = {
-            "Horario:", hora,
+            "Horario:", comboHora, // *** CORRECCIÓN 2: Usar comboHora en el mensaje ***
             "Nombre y apellido del paciente:", txtNombre,
             "DNI del paciente:", txtDni,
             "Teléfono del paciente:", txtTelefono,
             "Obra social:", txtObraSocial,
-"Motivo de consulta:", scrollMotivo        };
+            "Motivo de consulta:", scrollMotivo        };
 
         int opcion = JOptionPane.showConfirmDialog(panel, mensaje, "Modificar Turno",
                 JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
 
         if (opcion == JOptionPane.OK_OPTION) {
+            
+            String nuevaHora = (String) comboHora.getSelectedItem(); // Obtener la nueva hora
             String nuevoNombre = txtNombre.getText().trim();
             String nuevoDni = txtDni.getText().trim();
             String nuevoTelefono = txtTelefono.getText().trim();
             String nuevaObraSocial = txtObraSocial.getText().trim();
-           String nuevoMotivo = areaMotivo.getText().trim();
+            String nuevoMotivo = areaMotivo.getText().trim();
 
             if (!validarCampos(nuevoNombre, nuevoDni, nuevoTelefono, nuevoMotivo)) {
                 return;
             }
+            
+            // Lógica de Advertencia de DNI Duplicado
+            if (!nuevoDni.equals(dniOriginal)) {
+                if (TurnoManager.getInstancia().existeTurnoConDni(nuevoDni)) {
+                    int confirmacion = JOptionPane.showConfirmDialog(panel,
+                            "El nuevo DNI (" + nuevoDni + ") ya tiene un turno registrado. ¿Desea continuar?",
+                            "Advertencia de TURNO Duplicado",
+                            JOptionPane.YES_NO_OPTION,
+                            JOptionPane.WARNING_MESSAGE);
 
-            turno.setNombre(nuevoNombre);
-            turno.setDni(nuevoDni);
-            turno.setTelefono(nuevoTelefono);
-            turno.setObraSocial(nuevaObraSocial);
-            turno.setMotivo(nuevoMotivo);
+                    if (confirmacion == JOptionPane.NO_OPTION) {
+                        return; // Aborta la modificación si el usuario selecciona NO
+                    }
+                }
+            }
 
-            table.setValueAt(nuevoNombre, row, 1);
-            table.setValueAt("Ocupado", row, 2);
+            // *** LÓGICA DE ACTUALIZACIÓN DE HORA ***
+            if (!nuevaHora.equals(horaOriginal)) {
+                // 1. Eliminar (liberar) el turno de la hora antigua
+                TurnoManager.getInstancia().eliminarTurno(fechaActual, horaOriginal);
+
+                // 2. Agregar el turno en la nueva hora
+                TurnoManager.getInstancia().agregarTurno(fechaActual, nuevaHora,
+                        nuevoNombre, nuevoDni, nuevoTelefono, nuevaObraSocial, nuevoMotivo);
+            } else {
+                // Si la hora es la misma, solo modificamos los datos del turno existente.
+                turno.setNombre(nuevoNombre);
+                turno.setDni(nuevoDni);
+                turno.setTelefono(nuevoTelefono);
+                turno.setObraSocial(nuevaObraSocial);
+                turno.setMotivo(nuevoMotivo);
+            }
 
             table.repaint();
-
+         this.vistaLista.actualizarFechaYTurnos();
             JOptionPane.showMessageDialog(panel, "Turno modificado exitosamente");
         }
     }
@@ -297,7 +356,7 @@ JTextArea areaMotivo = new JTextArea(turno.getMotivo(), 4, 30); // Inicializar c
             table.setValueAt("Disponible", row, 2);
 
             table.repaint();
-
+this.vistaLista.actualizarFechaYTurnos();
             JOptionPane.showMessageDialog(panel, "Turno cancelado");
         }
     }
@@ -307,7 +366,7 @@ JTextArea areaMotivo = new JTextArea(turno.getMotivo(), 4, 30); // Inicializar c
         Turno0 turno = TurnoManager.getInstancia().getTurnoPorFechaYHora(fechaActual, hora);
 
         if (turno != null) {
-            // *** MODIFICADO: Usamos un JTextArea para que el texto se ajuste (word wrap) ***
+            // Usamos un JTextArea para que el texto se ajuste (word wrap)
             JTextArea textArea = new JTextArea(10, 30); // 10 filas, 30 columnas
             textArea.setText(
                     "Hora: " + turno.getHora() + "\n"
@@ -329,40 +388,41 @@ JTextArea areaMotivo = new JTextArea(turno.getMotivo(), 4, 30); // Inicializar c
                     scrollPane, // Pasamos el JScrollPane
                     "=== DETALLES DEL TURNO ===", // Título
                     JOptionPane.INFORMATION_MESSAGE);
-            // *** FIN DE MODIFICACIÓN ***
 
         } else {
-            // ... (código para "No se encontraron detalles")
+            JOptionPane.showMessageDialog(panel,
+                    "No se encontraron detalles para este turno.",
+                    "Sin datos",
+                    JOptionPane.WARNING_MESSAGE);
         }
     }
+
     // Clase interna simple dentro de EditorBotones
-private class LimitDocumentFilter extends DocumentFilter {
-    private int limite;
+    private class LimitDocumentFilter extends DocumentFilter {
+        private int limite;
 
-    public LimitDocumentFilter(int limite) {
-        this.limite = limite;
-    }
+        public LimitDocumentFilter(int limite) {
+            this.limite = limite;
+        }
 
-    @Override
-    public void insertString(FilterBypass fb, int offset, String string,
-                             AttributeSet attr) throws BadLocationException {
-        if ((fb.getDocument().getLength() + string.length()) <= limite) {
-            super.insertString(fb, offset, string, attr);
-        } else {
-            // Opcional: Mostrar un mensaje de advertencia
-            Toolkit.getDefaultToolkit().beep();
+        @Override
+        public void insertString(FilterBypass fb, int offset, String string,
+                AttributeSet attr) throws BadLocationException {
+            if ((fb.getDocument().getLength() + string.length()) <= limite) {
+                super.insertString(fb, offset, string, attr);
+            } else {
+                Toolkit.getDefaultToolkit().beep();
+            }
+        }
+
+        @Override
+        public void replace(FilterBypass fb, int offset, int length, String text,
+                AttributeSet attrs) throws BadLocationException {
+            if ((fb.getDocument().getLength() + text.length() - length) <= limite) {
+                super.replace(fb, offset, length, text, attrs);
+            } else {
+                Toolkit.getDefaultToolkit().beep();
+            }
         }
     }
-
-    @Override
-    public void replace(FilterBypass fb, int offset, int length, String text,
-                        AttributeSet attrs) throws BadLocationException {
-        if ((fb.getDocument().getLength() + text.length() - length) <= limite) {
-            super.replace(fb, offset, length, text, attrs);
-        } else {
-            // Opcional: Mostrar un mensaje de advertencia
-            Toolkit.getDefaultToolkit().beep();
-        }
-    }
-}
 }

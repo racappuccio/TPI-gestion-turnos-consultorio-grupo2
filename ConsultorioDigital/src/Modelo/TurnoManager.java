@@ -92,4 +92,48 @@ public class TurnoManager {
         }
         return null;
     }
+    
+    // Verifica si existe algún turno registrado con el DNI proporcionado
+    public boolean existeTurnoConDni(String dni) {
+        // Itera sobre todas las listas de turnos (una por cada fecha registrada)
+        for (List<Turno0> listaTurnos : turnosPorFecha.values()) {
+            
+            // Itera sobre cada turno dentro de la lista
+            for (Turno0 turno : listaTurnos) {
+                
+                // Compara el DNI (asegurando que el DNI no esté vacío)
+                if (dni != null && !dni.isEmpty() && dni.equals(turno.getDni())) {
+                    return true; // Encontrado!
+                }
+            }
+        }
+        return false; // No se encontró en ninguna fecha
+    }
+
+    // *******************************************************************
+    // *** NUEVO MÉTODO PARA OBTENER HORAS DISPONIBLES PARA MODIFICACIÓN ***
+    // *******************************************************************
+    
+    /**
+     * Obtiene una lista de todas las horas que no están reservadas en una fecha dada,
+     * más la hora actual del turno que se está modificando.
+     * * @param fecha La fecha a buscar.
+     * @param horaActual La hora del turno que se va a modificar (debe ser incluida).
+     * @return List<String> de horarios disponibles y la hora actual.
+     */
+    public List<String> getHorasDisponibles(LocalDate fecha, String horaActual) {
+        List<Turno0> todosLosTurnos = getTurnosPorFecha(fecha);
+        List<String> horasLibres = new ArrayList<>();
+
+        for (Turno0 turno : todosLosTurnos) {
+            // Un horario es "disponible" si:
+            // 1. Está vacío (el DNI es vacío)
+            // 2. O es la hora del turno que estamos modificando (para que el usuario pueda seleccionarla)
+            
+            if (turno.getDni().isEmpty() || turno.getHora().equals(horaActual)) {
+                horasLibres.add(turno.getHora());
+            }
+        }
+        return horasLibres;
+    }
 }

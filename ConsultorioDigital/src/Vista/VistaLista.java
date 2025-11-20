@@ -57,8 +57,7 @@ public class VistaLista extends javax.swing.JFrame {
 
         // Columna 3 es Acciones (antes era la 2)
         jTable1.getColumnModel().getColumn(3).setCellRenderer(new RenderBotones());
-        jTable1.getColumnModel().getColumn(3).setCellEditor(new EditorBotones(new JCheckBox(), jTable1, fechaActual));
-
+jTable1.getColumnModel().getColumn(3).setCellEditor(new EditorBotones(new JCheckBox(), jTable1, fechaActual, this));
         // Ajustar ancho de columnas (Ahora 4 anchos)
         jTable1.getColumnModel().getColumn(0).setPreferredWidth(100); // Hora
         jTable1.getColumnModel().getColumn(1).setPreferredWidth(350); // Nombre 
@@ -83,25 +82,6 @@ public class VistaLista extends javax.swing.JFrame {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 int row = jTable1.rowAtPoint(evt.getPoint());
                 int column = jTable1.columnAtPoint(evt.getPoint());
-
-                // Si clic en columna 2 (disponibilidad)
-                if (column == 2) {
-                    if (fechaActual.isBefore(LocalDate.now())) {
-                        JOptionPane.showMessageDialog(null,
-                                "No es posible gestionar turnos de un día que ya haya transcurrido",
-                                "Fecha inválida",
-                                JOptionPane.WARNING_MESSAGE);
-                        return;
-                    }
-                    String disponibilidad = (String) jTable1.getValueAt(row, 2);
-                    EditorBotones editor = new EditorBotones(new JCheckBox(), jTable1, fechaActual);
-
-                    if (disponibilidad == null || disponibilidad.equalsIgnoreCase("Disponible") || disponibilidad.isEmpty()) {
-                        editor.agendarTurno(row);  // Si está libre → agendar
-                    } else {
-                        editor.modificarTurno(row); // Si tiene paciente → modificar
-                    }
-                }
             }
         });
 
@@ -148,13 +128,13 @@ public class VistaLista extends javax.swing.JFrame {
         modelo.fireTableDataChanged();
     }
 
-    private void actualizarFechaYTurnos() {
+    public void actualizarFechaYTurnos() {
         // Actualizar título con la fecha
         jLabel1.setText("Turnos del día - " + fechaActual.format(formatoFecha));
 
         // Actualizar el editor con la nueva fecha (índice 3 para Acciones)
         jTable1.getColumnModel().getColumn(3).setCellEditor(
-                new EditorBotones(new JCheckBox(), jTable1, fechaActual)
+                new EditorBotones(new JCheckBox(), jTable1, fechaActual, this)
         );
 
         // Recargar turnos
@@ -411,6 +391,8 @@ public class VistaLista extends javax.swing.JFrame {
 
     private LocalDate fechaActual;
     private final DateTimeFormatter formatoFecha = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
+    
 }
 /*package Vista;
 
